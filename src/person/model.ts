@@ -1,7 +1,8 @@
+import { text } from "express";
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const personSchema = new Schema({
+const groupSchema = new Schema({
     groups: {
         type: [String],
         required: true
@@ -12,4 +13,4 @@ const personSchema = new Schema({
     }
 });
 
-export const mongoosePerson = mongoose.model('Person', personSchema); 
+export const mongoosePerson = mongoose.model('Person', groupSchema); 

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const groupSchema = new Schema({
+const personSchema = new Schema({
     firstName: {
         type: String,
         required: true
@@ -20,4 +20,10 @@ const groupSchema = new Schema({
     }
 });
 
-export const mongooseGroup = mongoose.model('Group', groupSchema); 
+personSchema.index({
+    firstName: 1,
+    lastName: 1,
+    age: -1
+});
+
+export const mongooseGroup = mongoose.model('Group', personSchema); 
