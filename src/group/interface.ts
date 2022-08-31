@@ -1,8 +1,6 @@
-export interface IPerson {
-    firstName: string,
-    age: number,
+export interface IGroup {
     groups: string[],
-    lastName: string
+    persons: string[]
 }
 
-export default IPerson;
+export default IGroup;
