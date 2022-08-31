@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
-import mongoosePerson from 'module';
+import { personModel } from "./model";
 import {Request, Response, Router} from 'express';
 import IPerson from "../person/interface";
 

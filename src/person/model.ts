@@ -1,16 +1,30 @@
-import { text } from "express";
 import mongoose from "mongoose";
+import IPerson from "./interface";
 const Schema = mongoose.Schema;
 
-const groupSchema = new Schema({
+const personSchema = new Schema({
+    firstName: {
+        type: String,
+        required: true
+    },
+    age: {
+        type: Number,
+        required: true
+    },
     groups: {
         type: [String],
         required: true
     },
-    people: {
-        type: [String],
+    lastname: {
+        type: String,
         required: true
     }
 });
 
-export const mongoosePerson = mongoose.model('Person', groupSchema); 
+personSchema.index({
+    firstName: 1,
+    lastName: 1,
+    age: -1
+});
+
+export const personModel = mongoose.model<IPerson & mongoose.Document>('Group', personSchema);

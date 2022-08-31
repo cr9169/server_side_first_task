@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
-import mongoosePerson from 'module';
+import { groupModel } from "./model";
 import {Request, Response, Router} from 'express';
 import IGroup from "../group/interface";
 
