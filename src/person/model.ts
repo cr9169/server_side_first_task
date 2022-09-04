@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import IPerson from "./interface";
+import { ObjectId } from "mongoose";
 const Schema = mongoose.Schema;
 
 const personSchema = new Schema({
@@ -12,7 +13,7 @@ const personSchema = new Schema({
         required: true
     },
     groups: {
-        type: [String],
+        type: Array<ObjectId>,
         required: true
     },
     lastname: {

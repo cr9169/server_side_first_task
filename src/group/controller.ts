@@ -9,8 +9,8 @@ const router = Router();
 
 const groups: IGroup[] = [
     {
-        groups: ["sdfsd", "sfsdfs"],
-        persons: ["asdas", "asdasd"]
+        groups: [],
+        persons: []
     }
 ];
 

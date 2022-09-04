@@ -11,7 +11,7 @@ const people: IPerson[] = [
     {
         firstName: "dzfzdf",
         age: 45,
-        groups: ["dfsd", "wfwfewf", "wefwerw"],
+        groups: [],
         lastName: "safdsdfsd"
     }
 ];
