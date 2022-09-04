@@ -28,4 +28,4 @@ personSchema.index({
     age: -1
 });
 
-export const personModel = mongoose.model<IPerson & mongoose.Document>('Group', personSchema);
+export const personModel = mongoose.model<IPerson & mongoose.Document>('Person', personSchema);
