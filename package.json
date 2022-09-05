@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tcs",
+    "build": "tsc",
+    "start": "tsc && node ./dist/src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

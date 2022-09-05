@@ -1,8 +1,8 @@
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 export interface IGroup {
-    groups: ObjectId[], // maybe change to an array of type IGroup
-    persons: ObjectId[] // maybe change to an array of type IPerson
+    groups: mongoose.Types.ObjectId[], // maybe change to an array of type IGroup
+    persons: mongoose.Types.ObjectId[] // maybe change to an array of type IPerson
 }
 
 export default IGroup;

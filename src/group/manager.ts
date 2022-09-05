@@ -1,23 +1,24 @@
 import { getGroupByID, deleteGroupByID, createGroup, updateGroupByID, getAllGroupsAndPeopleInGroup } from "./repository";
 import { ObjectId } from "mongoose";
 import IGroup from "./interface";
+import mongoose from "mongoose";
 
-export const getGroupByIDM = async (id: ObjectId) => {
-    await getGroupByID(id); 
+export const getGroupByIDM = (id: mongoose.Types.ObjectId) => {
+    return getGroupByID(id); 
 };
 
-export const deleteGroupByIDM = async (id: ObjectId) => {
-    await deleteGroupByID(id);
+export const deleteGroupByIDM = (id: mongoose.Types.ObjectId) => {
+    return deleteGroupByID(id);
 };
 
-export const createGroupM = async (group: IGroup) => {
-    await createGroup(group);
+export const createGroupM = (group: IGroup) => {
+    return createGroup(group);
 };
 
-export const updateGroupByIDM = async (group: IGroup, groupID: ObjectId) => {
-    await updateGroupByID(group, groupID);
+export const updateGroupByIDM = (group: IGroup, groupID: mongoose.Types.ObjectId) => {
+    return updateGroupByID(group, groupID);
 };
 
-export const getAllGroupsAndPeopleInGroupM = async (id: ObjectId) => {
-    await getAllGroupsAndPeopleInGroup(id);
+export const getAllGroupsAndPeopleInGroupM = (id: mongoose.Types.ObjectId) => {
+    return getAllGroupsAndPeopleInGroup(id);
 };

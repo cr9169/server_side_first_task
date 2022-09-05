@@ -1,15 +1,14 @@
-import mongoose from "mongoose";
 import IGroup from "./interface";
-import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const groupSchema = new Schema({
     groups: {
-        type: Array<ObjectId>,
+        type: Array<mongoose.Types.ObjectId>,
         required: true
     },
     people: {
-        type: Array<ObjectId>,
+        type: Array<mongoose.Types.ObjectId>,
         required: true
     }
 });

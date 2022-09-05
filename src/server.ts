@@ -25,15 +25,15 @@ app.use(errorHandler);
 
 connect();
 
-async function connect() {
-  await mongoose
-      .connect(db)
+function connect() {
+  mongoose
+    .connect(db)
       .then(() => {
         console.log("Connected to db");
         app.listen(PORT, async () => {
             console.log("server is listening to port " + PORT);
-            const all = await personModel.find({});
-            console.log(all);
+            // const all = await personModel.find({});
+            // console.log(all);
         });
       })
       .catch(() => {
