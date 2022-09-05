@@ -1,33 +1,23 @@
-import { RequestHandler } from "express";
-import createHttpError from "http-errors";
-import { groupModel } from "./model";
-import {Request, Response, Router} from 'express';
-import IGroup from "../group/interface";
+import { getGroupByIDM, deleteGroupByIDM, createGroupM, updateGroupByIDM, getAllGroupsAndPeopleInGroupM } from "./manager";
+import mongoose from "mongoose";
+import express from "express";
 
-const path : string = '/group';
-const router = Router();
-
-const groups: IGroup[] = [
-    {
-        groups: [],
-        persons: []
-    }
-];
-
-function intializeRoutes() : void{
-    router.get(path, getGroups);
-    router.get(path, createGroup);
-}
-
-const getGroups = (request: Request, response: Response) => {
-    response.send(groups);
+export const getGroupByIDC = async (req:express.Request, res:express.Response) => {
+    res.json(await getGroupByIDM(new mongoose.Schema.Types.ObjectId((req.params.id))));
 };
 
-const createGroup = (request: Request, response: Response) => {
-    const group: IGroup = request.body;
-    groups.push(group);
-    response.send(group);
+export const deleteGroupByIDC = async (req:express.Request, res:express.Response) => {
+    res.json(await deleteGroupByIDM(new mongoose.Schema.Types.ObjectId((req.params.id))));
 };
 
-export default {intializeRoutes};
+export const createGroupC = async (req:express.Request, res:express.Response) => {
+    res.json(await createGroupM(req.body))
+};
 
+export const updateGroupByIDC = async (req:express.Request, res:express.Response) => {
+    res.json(await updateGroupByIDM(req.body, new mongoose.Schema.Types.ObjectId((req.params.groupID))));
+};
+
+export const getAllGroupsAndPeopleInGroupC = async (req:express.Request, res:express.Response) => {
+    res.json(await getAllGroupsAndPeopleInGroupM(new mongoose.Schema.Types.ObjectId((req.params.id))));
+};

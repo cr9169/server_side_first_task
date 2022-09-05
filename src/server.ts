@@ -5,6 +5,9 @@ import groupRoute from "./group/router";
 import mongoose from "mongoose";
 import createHttpError from "http-errors";
 import { errorHandler } from "../errorHandler";
+import { personModel } from "./person/model";
+import { groupModel } from "./group/model";
+import IPerson from "./person/interface";
 
 const app = express();
 const PORT: number = config.SERVER_PORT;
@@ -20,14 +23,20 @@ app.use(() => {
 });
 app.use(errorHandler);
 
-mongoose
-  .connect(db)
-  .then(() => {
-    console.log("Connected to db");
-    app.listen(PORT, () => {
-        console.log("server is listening to port " + PORT);
-    });
-  })
-  .catch(() => {
-    throw createHttpError(501, "Unable to connect database");
-  });
+connect();
+
+async function connect() {
+  await mongoose
+      .connect(db)
+      .then(() => {
+        console.log("Connected to db");
+        app.listen(PORT, async () => {
+            console.log("server is listening to port " + PORT);
+            const all = await personModel.find({});
+            console.log(all);
+        });
+      })
+      .catch(() => {
+        throw createHttpError(501, "Unable to connect database");
+      });
+}

@@ -1,12 +1,15 @@
 import express, { Router } from 'express';
+import { getPersonByIDC, deletePersonByIDC, createPersonC, updatePersonByIDC, getPersonInGroupByNameC, getAllGroupsOfPersonC } from "./controller"
 
-const personRoute : Router = express.Router()
+const personRoute: Router = express.Router();
   
-personRoute.get("/person", (req, res, next) => { // change to the bottom
-  res.send("This is the person request");
-});
+personRoute.get("/person/:id", getPersonByIDC);
+personRoute.get("/person/:name/:id", getPersonInGroupByNameC);
+personRoute.get("/person/All/:id", getAllGroupsOfPersonC);
+
+personRoute.delete("/person/:id", deletePersonByIDC);
   
-// groupRoute.get("/person", getPerson);
-// groupRoute.post(getPersonData);
+personRoute.post("/person/", createPersonC);
+personRoute.post("/person/update/:id", updatePersonByIDC);
 
 export default personRoute;

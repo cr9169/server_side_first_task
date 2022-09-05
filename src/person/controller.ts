@@ -1,34 +1,28 @@
-import { RequestHandler } from "express";
-import createHttpError from "http-errors";
-import { personModel } from "./model";
-import {Request, Response, Router} from 'express';
-import IPerson from "../person/interface";
+import { getPersonByIDM, deletePersonByIDM, createPersonM, updatePersonByIDM, getPersonInGroupByNameM, getAllGroupsOfPersonM } from "./manager";
+import mongoose from "mongoose";
+import express from "express";
 
-const path : string = '/person';
-const router = Router();
-
-const people: IPerson[] = [
-    {
-        firstName: "dzfzdf",
-        age: 45,
-        groups: [],
-        lastName: "safdsdfsd"
-    }
-];
-
-function intializeRoutes() : void{
-    router.get(path, getPeople);
-    router.get(path, createPerson);
-}
-
-const getPeople = (request: Request, response: Response) => {
-    response.send(people);
+export const getPersonByIDC = async (req:express.Request, res:express.Response) => {
+    res.json(await getPersonByIDM(new mongoose.Schema.Types.ObjectId((req.params.id))));
 };
 
-const createPerson = (request: Request, response: Response) => {
-    const person: IPerson = request.body;
-    people.push(person);
-    response.send(person);
+export const deletePersonByIDC = async (req:express.Request, res:express.Response) => {
+    res.json(await deletePersonByIDM(new mongoose.Schema.Types.ObjectId((req.params.id))));
 };
 
-export default {intializeRoutes};
+export const createPersonC = async (req:express.Request, res:express.Response) => {
+    
+    res.json(await createPersonM(req.body));
+};
+
+export const updatePersonByIDC = async (req:express.Request, res:express.Response) => {
+    res.json(await updatePersonByIDM(req.body, new mongoose.Schema.Types.ObjectId((req.params.groupID))));
+};
+
+export const getPersonInGroupByNameC = async (req:express.Request, res:express.Response) => {
+    res.json(await getPersonInGroupByNameM(req.params.name, new mongoose.Schema.Types.ObjectId((req.params.groupID))));
+};
+
+export const getAllGroupsOfPersonC = async (req:express.Request, res:express.Response) => {
+    res.json(await getAllGroupsOfPersonM(new mongoose.Schema.Types.ObjectId((req.params.id))));
+};
