@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 
 const groupSchema = new Schema({
     groups: {
-        type: Array<mongoose.Types.ObjectId>,
+        type: Array<string | IGroup>,
         required: true
     },
     people: {
-        type: Array<mongoose.Types.ObjectId>,
+        type: Array<string | IGroup>,
         required: true
     }
 });
