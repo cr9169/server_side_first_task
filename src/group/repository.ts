@@ -3,8 +3,15 @@ import IGroup from "./interface";
 import mongoose from "mongoose";
 
 
-export const deleteGroupByID = (id: mongoose.Types.ObjectId) => {
-    return groupModel.deleteOne(id).orFail(new Error('not found'));
+export const deleteGroupByID = async (id: mongoose.Types.ObjectId | null | undefined) => {
+    const group = await groupModel.findById(id);
+
+    if(group?.groups.length == 0)
+        return groupModel.deleteOne(id!);
+
+    const groups = group?.groups;
+    groups!.forEach( (gr) => { deleteGroupByID(gr._id); } );
+
 };
 
 export const createGroup = (group: IGroup) => {

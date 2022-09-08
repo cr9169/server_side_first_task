@@ -1,5 +1,5 @@
 import { getPersonByID, deletePersonByID, createPerson, updatePersonByID, getPersonInGroupByName, getAllGroupsOfPerson} from "./repository";
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import IPerson from "./interface";
 
 export const getPersonByIDM = (id: mongoose.Types.ObjectId) => {

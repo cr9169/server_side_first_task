@@ -12,7 +12,7 @@ const personSchema = new Schema({
         required: true
     },
     groups: {
-        type: Array<mongoose.Types.ObjectId>,
+        type: Array<string | IPerson>,
         required: true
     },
     lastname: {
