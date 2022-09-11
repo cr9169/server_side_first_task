@@ -9,12 +9,14 @@ const groupSchema = new Schema({
     },
     groups: {
         type: Array<String | IGroup>,
+        ref: 'group',
         required: true
     },
     people: {
         type: Array<String | IGroup>,
+        ref: 'person',
         required: true
     }
 });
 
-export const groupModel = mongoose.model<IGroup & mongoose.Document>('Group', groupSchema);
+export const groupModel = mongoose.model<IGroup & mongoose.Document>('group', groupSchema);

@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 export const getPersonByID = (id: string) => {
     console.log(id);
     
-    return personModel.findById(id).orFail(new Error('not found'));
+    return personModel.findById(id) //.orFail(new Error('not found'));
 };
 
 export const deletePersonByID = (id: string) => {
@@ -17,14 +17,16 @@ export const deletePersonByID = (id: string) => {
 
 export const createPerson = async (person: IPerson) => {
     let personID: any;
-    await personModel.create(person, (err, onePerson) => 
+    const createdPerson = await personModel.create(person, (err, onePerson) => 
     {
+        console.log(onePerson)
         if (err) 
             { console.log(err); }
         else
             { personID = onePerson._id;
                 personID = personID.toString(); }
     });
+
 	person.groups.forEach( async (group) => {
         let foundGroup: IGroup = await getGroupByID(group as string);
         let name: string = foundGroup.name;
@@ -51,7 +53,7 @@ export const getPersonInGroupByName = async (name: string, groupID: string) => {
 };
 
 export const getAllGroupsOfPerson = async (id: string) => {
-    const groups = await (await getPersonByID(id)).groups;
-    return groups;
+    const person =  (await getPersonByID(id))
+    return person?.groups;
 };
 

@@ -13,9 +13,10 @@ const personSchema = new Schema({
     },
     groups: {
         type: Array<string | IPerson>,
+        ref: 'group',
         required: true
     },
-    lastname: {
+    lastName: {
         type: String,
         required: true
     }
@@ -27,4 +28,4 @@ personSchema.index({
     age: -1
 });
 
-export const personModel = mongoose.model<IPerson & mongoose.Document>('Person', personSchema);
+export const personModel = mongoose.model<IPerson & mongoose.Document>('person', personSchema);

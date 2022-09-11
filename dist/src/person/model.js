@@ -19,7 +19,7 @@ const personSchema = new Schema({
         type: (Array),
         required: true
     },
-    lastname: {
+    lastName: {
         type: String,
         required: true
     }
@@ -29,5 +29,5 @@ personSchema.index({
     lastName: 1,
     age: -1
 });
-exports.personModel = mongoose_1.default.model('Person', personSchema);
+exports.personModel = mongoose_1.default.model('person', personSchema);
 //# sourceMappingURL=model.js.map

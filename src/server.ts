@@ -27,7 +27,7 @@ connect();
 
 function connect() {
   mongoose
-    .connect(db)
+    .connect(db + "/tsTask")
       .then(() => {
         console.log("Connected to db");
         app.listen(PORT, async () => {
@@ -38,5 +38,5 @@ function connect() {
       })
       .catch(() => {
         throw createHttpError(501, "Unable to connect database");
-      });s
+      });
 }

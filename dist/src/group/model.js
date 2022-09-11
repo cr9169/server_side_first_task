@@ -20,5 +20,5 @@ const groupSchema = new Schema({
         required: true
     }
 });
-exports.groupModel = mongoose_1.default.model('Group', groupSchema);
+exports.groupModel = mongoose_1.default.model('group', groupSchema);
 //# sourceMappingURL=model.js.map

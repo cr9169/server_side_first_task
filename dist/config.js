@@ -9,5 +9,5 @@ dotenv_1.default.config();
 exports.config = {
     SERVER_PORT: Number(process.env.SERVER_PORT) || 3000
 };
-exports.uri = "mongodb://0.0.0.0:27017";
+exports.uri = "mongodb://127.0.0.1:27017";
 //# sourceMappingURL=config.js.map

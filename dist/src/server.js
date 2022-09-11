@@ -32,7 +32,7 @@ app.use(errorHandler_1.errorHandler);
 connect();
 function connect() {
     mongoose_1.default
-        .connect(db)
+        .connect(db + "/tsTask")
         .then(() => {
         console.log("Connected to db");
         app.listen(PORT, () => __awaiter(this, void 0, void 0, function* () {

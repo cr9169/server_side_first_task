@@ -1,4 +1,4 @@
-import { getPersonByIDM, deletePersonByIDM, createPersonM, updatePersonByIDM, getPersonInGroupByNameM, getAllGroupsOfPersonM } from "./manager";
+import { getPersonByIDM, deletePersonByIDM, createPersonM, updatePersonByIDM, getPersonInGroupByNameM, getAllGroupsOfPersonM, populatePeople } from "./manager";
 import express from "express";
 
 export const getPersonByIDC = async (req:express.Request, res:express.Response) => {
@@ -24,4 +24,8 @@ export const getPersonInGroupByNameC = async (req:express.Request, res:express.R
 
 export const getAllGroupsOfPersonC = async (req:express.Request, res:express.Response) => {
     res.json(await getAllGroupsOfPersonM(req.params.id));
+};
+
+export const getPopulatedPeople = async (req:express.Request, res:express.Response) => {
+    res.json(await populatePeople());
 };

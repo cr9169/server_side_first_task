@@ -1,5 +1,6 @@
 import { getPersonByID, deletePersonByID, createPerson, updatePersonByID, getPersonInGroupByName, getAllGroupsOfPerson} from "./repository";
 import IPerson from "./interface";
+import { personModel } from "./model";
 
 export const getPersonByIDM = (id: string) => {
     return getPersonByID(id); // .then().catch();
@@ -24,4 +25,8 @@ export const getPersonInGroupByNameM = (name: string, groupID: string) => {
 export const getAllGroupsOfPersonM = (id: string) => {
     return getAllGroupsOfPerson(id);
 };
+
+export const populatePeople = () => {
+    return personModel.find().populate('group');
+}
 

@@ -15,7 +15,7 @@ const repository_1 = require("../group/repository");
 const model_2 = require("../group/model");
 const getPersonByID = (id) => {
     console.log(id);
-    return model_1.personModel.findById(id).orFail(new Error('not found'));
+    return model_1.personModel.findById(id);
 };
 exports.getPersonByID = getPersonByID;
 const deletePersonByID = (id) => {
@@ -24,7 +24,8 @@ const deletePersonByID = (id) => {
 exports.deletePersonByID = deletePersonByID;
 const createPerson = (person) => __awaiter(void 0, void 0, void 0, function* () {
     let personID;
-    yield model_1.personModel.create(person, (err, onePerson) => {
+    const createdPerson = yield model_1.personModel.create(person, (err, onePerson) => {
+        console.log(onePerson);
         if (err) {
             console.log(err);
         }
@@ -58,8 +59,8 @@ const getPersonInGroupByName = (name, groupID) => __awaiter(void 0, void 0, void
 });
 exports.getPersonInGroupByName = getPersonInGroupByName;
 const getAllGroupsOfPerson = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const groups = yield (yield (0, exports.getPersonByID)(id)).groups;
-    return groups;
+    const person = (yield (0, exports.getPersonByID)(id));
+    return person === null || person === void 0 ? void 0 : person.groups;
 });
 exports.getAllGroupsOfPerson = getAllGroupsOfPerson;
 //# sourceMappingURL=repository.js.map
