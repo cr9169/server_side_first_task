@@ -10,8 +10,8 @@ const deleteGroupByIDM = (id) => {
     return (0, repository_1.deleteGroupByID)(id);
 };
 exports.deleteGroupByIDM = deleteGroupByIDM;
-const createGroupM = (group) => {
-    return (0, repository_1.createGroup)(group);
+const createGroupM = (groupName) => {
+    return (0, repository_1.createGroup)(groupName);
 };
 exports.createGroupM = createGroupM;
 const updateGroupByIDM = (group, groupID) => {

@@ -1,12 +1,11 @@
 import { getPersonByID, deletePersonByID, createPerson, updatePersonByID, getPersonInGroupByName, getAllGroupsOfPerson} from "./repository";
-import mongoose from "mongoose";
 import IPerson from "./interface";
 
-export const getPersonByIDM = (id: mongoose.Types.ObjectId) => {
-    return getPersonByID(id) // .then().catch();
+export const getPersonByIDM = (id: string) => {
+    return getPersonByID(id); // .then().catch();
 };
 
-export const deletePersonByIDM = (id: mongoose.Types.ObjectId) => {
+export const deletePersonByIDM = (id: string) => {
     return  deletePersonByID(id);
 };
 
@@ -14,15 +13,15 @@ export const createPersonM = (person: IPerson) => {
     return createPerson(person);
 };
 
-export const updatePersonByIDM = (person: IPerson, id: mongoose.Types.ObjectId) => {
+export const updatePersonByIDM = (person: IPerson, id: string) => {
     return updatePersonByID(person, id);
 };
 
-export const getPersonInGroupByNameM = (name: string, groupID: mongoose.Types.ObjectId) => {
+export const getPersonInGroupByNameM = (name: string, groupID: string) => {
     return getPersonInGroupByName(name, groupID);
 };
 
-export const getAllGroupsOfPersonM = (id: mongoose.Types.ObjectId) => {
+export const getAllGroupsOfPersonM = (id: string) => {
     return getAllGroupsOfPerson(id);
 };
 

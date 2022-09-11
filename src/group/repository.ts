@@ -1,34 +1,35 @@
 import { groupModel } from "./model";
 import IGroup from "./interface";
-import mongoose from "mongoose";
 
-
-export const deleteGroupByID = async (id: mongoose.Types.ObjectId | null | undefined) => {
+export const deleteGroupByID = async (id: string | null | undefined) => {
     const group = await groupModel.findById(id);
 
-    if(group?.groups.length == 0)
-        return groupModel.deleteOne(id!);
+    if (group?.groups.length == 0)
+        return groupModel.findOneAndRemove({_id:id}).orFail(new Error('not found'));
 
     const groups = group?.groups;
-    groups!.forEach( (gr) => { deleteGroupByID(gr._id); } );
+    groups!.forEach(async (group) => {
+        await deleteGroupByID(group as string);
+    });
+}
 
+
+export const createGroup = (groupName: string) => {
+    return groupModel.create({name: groupName,
+                              persons: [],
+                              groups: []});
 };
 
-export const createGroup = (group: IGroup) => {
-    return groupModel.create(group);
+export const updateGroupByID = async (group: IGroup, groupID: string) => {
+    return groupModel.findByIdAndUpdate(groupID, group).orFail(new Error('not found'));
 };
 
-export const updateGroupByID = (group: IGroup, groupID: mongoose.Types.ObjectId) => {
-    return groupModel.replaceOne(getGroupByID(groupID), group).orFail(new Error('not found'));
+export const getAllGroupsAndPeopleInGroup = async (id: string): Promise<any[]> => {
+    const groups = await getGroupByID(id);
+    const persons = await getGroupByID(id);
+    return [groups, persons];
 };
 
-export const getAllGroupsAndPeopleInGroup = async (id: mongoose.Types.ObjectId) => {
-    const groups =  (await getGroupByID(id)).groups;
-    const people =  (await getGroupByID(id)).persons;
-    
-    return [groups, people];
-};
-
-export const getGroupByID = (id: mongoose.Types.ObjectId) => {
-    return groupModel.findById(id).orFail(new Error('not found'));
+export const getGroupByID = (id: string): Promise<IGroup> => {
+    return groupModel.findById(id).orFail(new Error('not found')).exec(); // .exec() - ממיר לטייפ של הערך שמוחזר
 };

@@ -38,5 +38,5 @@ function connect() {
       })
       .catch(() => {
         throw createHttpError(501, "Unable to connect database");
-      });
+      });s
 }

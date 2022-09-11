@@ -12,18 +12,36 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllGroupsOfPerson = exports.getPersonInGroupByName = exports.updatePersonByID = exports.createPerson = exports.deletePersonByID = exports.getPersonByID = void 0;
 const model_1 = require("./model");
 const repository_1 = require("../group/repository");
+const model_2 = require("../group/model");
 const getPersonByID = (id) => {
     console.log(id);
     return model_1.personModel.findById(id).orFail(new Error('not found'));
 };
 exports.getPersonByID = getPersonByID;
 const deletePersonByID = (id) => {
-    return model_1.personModel.deleteOne(id).orFail(new Error('not found'));
+    return model_1.personModel.findOneAndRemove({ _id: id }).orFail(new Error('not found'));
 };
 exports.deletePersonByID = deletePersonByID;
-const createPerson = (person) => {
-    return model_1.personModel.create(person);
-};
+const createPerson = (person) => __awaiter(void 0, void 0, void 0, function* () {
+    let personID;
+    yield model_1.personModel.create(person, (err, onePerson) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            personID = onePerson._id;
+            personID = personID.toString();
+        }
+    });
+    person.groups.forEach((group) => __awaiter(void 0, void 0, void 0, function* () {
+        let foundGroup = yield (0, repository_1.getGroupByID)(group);
+        let name = foundGroup.name;
+        let groups = foundGroup.groups;
+        let persons = foundGroup.persons;
+        persons.push(personID);
+        yield model_2.groupModel.findByIdAndUpdate(foundGroup, { name: name, groups: groups, persons: persons });
+    }));
+});
 exports.createPerson = createPerson;
 const updatePersonByID = (person, id) => {
     return model_1.personModel.replaceOne((0, exports.getPersonByID)(id), person).orFail(new Error('not found'));
@@ -31,8 +49,8 @@ const updatePersonByID = (person, id) => {
 exports.updatePersonByID = updatePersonByID;
 const getPersonInGroupByName = (name, groupID) => __awaiter(void 0, void 0, void 0, function* () {
     let personFound = null;
-    const id = yield (0, repository_1.getGroupByID)(groupID);
-    yield id.persons.forEach((person) => __awaiter(void 0, void 0, void 0, function* () {
+    const group = yield (0, repository_1.getGroupByID)(groupID);
+    yield group.persons.forEach((person) => __awaiter(void 0, void 0, void 0, function* () {
         if (yield model_1.personModel.findById(person).equals(name))
             personFound = yield (0, exports.getPersonByID)(person);
     }));
