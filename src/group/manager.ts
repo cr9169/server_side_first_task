@@ -11,17 +11,14 @@ export const deleteGroupByIDM = (id: string) => {
 };
 
 export const createGroupM = (groupName: string) => {
-    /*const groups : mongoose.Types.ObjectId[] = group.groups;
-    
-    if(!groups.includes(group))*/
-        return createGroup(groupName);
-    /*else   
-        console.error("group can't contain itself!")*/
+    return createGroup(groupName)
 };
 
 export const updateGroupByIDM = (group: IGroup, groupID: string) => {
-
-    return updateGroupByID(group, groupID);
+    if(group.groups.length == new Set(group.groups as string[]).size &&
+     group.people.length == new Set(group.people as string[]).size && !(group.groups as string[]).includes(groupID))
+        return updateGroupByID(group, groupID);
+    console.error("cant update group");
 };
 
 export const getAllGroupsAndPeopleInGroupM = (id: string) => {

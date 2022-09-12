@@ -3,7 +3,7 @@ import IPerson from "./interface";
 import { personModel } from "./model";
 
 export const getPersonByIDM = (id: string) => {
-    return getPersonByID(id); // .then().catch();
+    return getPersonByID(id);
 };
 
 export const deletePersonByIDM = (id: string) => {

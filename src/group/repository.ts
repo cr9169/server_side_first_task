@@ -5,7 +5,7 @@ export const deleteGroupByID = async (id: string | null | undefined) => {
     const group = await groupModel.findById(id);
 
     if (group?.groups.length == 0)
-        return groupModel.findOneAndRemove({_id:id}).orFail(new Error('not found'));
+        return groupModel.findOneAndRemove({_id:id});
 
     const groups = group?.groups;
     groups!.forEach(async (group) => {
@@ -21,7 +21,7 @@ export const createGroup = (groupName: string) => {
 };
 
 export const updateGroupByID = async (group: IGroup, groupID: string) => {
-    return groupModel.findByIdAndUpdate(groupID, group).orFail(new Error('not found'));
+    return groupModel.findByIdAndUpdate(groupID, group);
 };
 
 export const getAllGroupsAndPeopleInGroup = async (id: string): Promise<any[]> => {
@@ -30,6 +30,6 @@ export const getAllGroupsAndPeopleInGroup = async (id: string): Promise<any[]> =
     return [groups, persons];
 };
 
-export const getGroupByID = (id: string): Promise<IGroup> => {
-    return groupModel.findById(id).orFail(new Error('not found')).exec(); // .exec() - ממיר לטייפ של הערך שמוחזר
+export const getGroupByID = (id: string) => {
+    return groupModel.findById(id); 
 };

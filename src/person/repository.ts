@@ -3,7 +3,6 @@ import IPerson from "./interface";
 import {getGroupByID}  from "../group/repository";
 import { groupModel } from "../group/model";
 import IGroup from "../group/interface";
-import mongoose from "mongoose";
 
 export const getPersonByID = (id: string) => {
     console.log(id);
@@ -12,7 +11,7 @@ export const getPersonByID = (id: string) => {
 };
 
 export const deletePersonByID = (id: string) => {
-    return personModel.findOneAndRemove({_id:id}).orFail(new Error('not found'));
+    return personModel.findOneAndRemove({_id:id});
 };
 
 export const createPerson = async (person: IPerson) => {
@@ -28,28 +27,33 @@ export const createPerson = async (person: IPerson) => {
     });
 
 	person.groups.forEach( async (group) => {
-        let foundGroup: IGroup = await getGroupByID(group as string);
-        let name: string = foundGroup.name;
-        let groups: string[] | IGroup[] = foundGroup.groups;
-        let persons: string[] | IPerson[] = foundGroup.persons; 
-        persons.push(personID);
-        await groupModel.findByIdAndUpdate(foundGroup, { name: name, groups: groups, persons: persons });
+        const foundGroup : (IGroup | null) = await groupModel.findById(group as string);
+        if(foundGroup)
+        {
+            let name: string = foundGroup.name;
+            let groups: string[] | IGroup[] = foundGroup.groups;
+            let persons: string[] | IPerson[] = foundGroup.people; 
+            persons.push(personID);
+            await groupModel.findByIdAndUpdate(foundGroup, { name: name, groups: groups, persons: persons });
+        }
+        else
+            console.error("cant find group");
     });
 };
 
 export const updatePersonByID = (person: IPerson, id: string) => {
-    return personModel.replaceOne(getPersonByID(id), person).orFail(new Error('not found'));
+    return personModel.replaceOne(getPersonByID(id), person);
 };
 
 export const getPersonInGroupByName = async (name: string, groupID: string) => {
     let personFound = null;
     const group = await getGroupByID(groupID);
-    await group.persons.forEach( async (person) => {
+    await group?.people.forEach( async (person) => {
         if (await personModel.findById(person).equals(name))
             personFound = await getPersonByID(person as string);
     });
 
-    return personFound; // might be null if person not found
+    return personFound; 
 };
 
 export const getAllGroupsOfPerson = async (id: string) => {
