@@ -12,7 +12,7 @@ const personSchema = new Schema({
         required: true
     },
     groups: {
-        type: Array<string | IPerson>,
+        type: Array<string>,
         ref: 'group',
         required: true
     },

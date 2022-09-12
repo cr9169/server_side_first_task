@@ -17,6 +17,7 @@ const personSchema = new Schema({
     },
     groups: {
         type: (Array),
+        ref: 'group',
         required: true
     },
     lastName: {

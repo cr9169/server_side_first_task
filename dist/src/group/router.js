@@ -8,8 +8,9 @@ const controller_1 = require("./controller");
 const groupRoute = express_1.default.Router();
 groupRoute.get("/group/:id", controller_1.getGroupByIDC);
 groupRoute.get("/group/All/:id", controller_1.getAllGroupsAndPeopleInGroupC);
+groupRoute.get("group/populated", controller_1.getPopulatedGroups);
 groupRoute.delete("/group/:id", controller_1.deleteGroupByIDC);
-groupRoute.post("/group/", controller_1.createGroupC);
+groupRoute.post("/group/:name", controller_1.createGroupC);
 groupRoute.post("/group/update/:id", controller_1.updateGroupByIDC);
 exports.default = groupRoute;
 //# sourceMappingURL=router.js.map

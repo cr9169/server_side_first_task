@@ -8,12 +8,12 @@ const groupSchema = new Schema({
         required: true
     },
     groups: {
-        type: Array<String | IGroup>,
+        type: Array<String>,
         ref: 'group',
         required: true
     },
     people: {
-        type: Array<String | IGroup>,
+        type: Array<String>,
         ref: 'person',
         required: true
     }

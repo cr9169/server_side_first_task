@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllGroupsOfPersonM = exports.getPersonInGroupByNameM = exports.updatePersonByIDM = exports.createPersonM = exports.deletePersonByIDM = exports.getPersonByIDM = void 0;
+exports.populatePeople = exports.getAllGroupsOfPersonM = exports.getPersonInGroupByNameM = exports.updatePersonByIDM = exports.createPersonM = exports.deletePersonByIDM = exports.getPersonByIDM = void 0;
 const repository_1 = require("./repository");
+const model_1 = require("./model");
 const getPersonByIDM = (id) => {
     return (0, repository_1.getPersonByID)(id);
 };
@@ -26,4 +27,8 @@ const getAllGroupsOfPersonM = (id) => {
     return (0, repository_1.getAllGroupsOfPerson)(id);
 };
 exports.getAllGroupsOfPersonM = getAllGroupsOfPersonM;
+const populatePeople = () => {
+    return model_1.personModel.find().populate('groups');
+};
+exports.populatePeople = populatePeople;
 //# sourceMappingURL=manager.js.map

@@ -3,13 +3,13 @@ import { getGroupByIDC, deleteGroupByIDC, createGroupC, updateGroupByIDC, getAll
 
 const groupRoute : Router = express.Router();
 
-groupRoute.get("/group/:id", getGroupByIDC);
-groupRoute.get("/group/All/:id", getAllGroupsAndPeopleInGroupC);
-groupRoute.get("group/populated", getPopulatedGroups);
+groupRoute.get("/group/:id", getGroupByIDC); //
+groupRoute.get("/group/All/:id", getAllGroupsAndPeopleInGroupC); //
+groupRoute.get("group/populated", getPopulatedGroups); //
 
-groupRoute.delete("/group/:id", deleteGroupByIDC);
+groupRoute.delete("/group/:id", deleteGroupByIDC); //
   
-groupRoute.post("/group/", createGroupC);
-groupRoute.post("/group/update/:id", updateGroupByIDC);
+groupRoute.post("/group/:name", createGroupC);
+groupRoute.post("/group/update/:id", updateGroupByIDC); //
 
 export default groupRoute;

@@ -13,10 +13,12 @@ const groupSchema = new Schema({
     },
     groups: {
         type: (Array),
+        ref: 'group',
         required: true
     },
     people: {
         type: (Array),
+        ref: 'person',
         required: true
     }
 });

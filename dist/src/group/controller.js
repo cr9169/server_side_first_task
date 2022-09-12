@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllGroupsAndPeopleInGroupC = exports.updateGroupByIDC = exports.createGroupC = exports.deleteGroupByIDC = exports.getGroupByIDC = void 0;
+exports.getPopulatedGroups = exports.getAllGroupsAndPeopleInGroupC = exports.updateGroupByIDC = exports.createGroupC = exports.deleteGroupByIDC = exports.getGroupByIDC = void 0;
 const manager_1 = require("./manager");
 const getGroupByIDC = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(yield (0, manager_1.getGroupByIDM)(req.params.id));
@@ -24,11 +24,15 @@ const createGroupC = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.createGroupC = createGroupC;
 const updateGroupByIDC = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json(yield (0, manager_1.updateGroupByIDM)(req.body, req.params.groupID));
+    res.json(yield (0, manager_1.updateGroupByIDM)(req.body, req.params.id));
 });
 exports.updateGroupByIDC = updateGroupByIDC;
 const getAllGroupsAndPeopleInGroupC = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(yield (0, manager_1.getAllGroupsAndPeopleInGroupM)(req.params.id));
 });
 exports.getAllGroupsAndPeopleInGroupC = getAllGroupsAndPeopleInGroupC;
+const getPopulatedGroups = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json(yield (0, manager_1.populateGroups)());
+});
+exports.getPopulatedGroups = getPopulatedGroups;
 //# sourceMappingURL=controller.js.map

@@ -1,5 +1,7 @@
 import { groupModel } from "./model";
 import IGroup from "./interface";
+import { personModel } from "../person/model";
+import IPerson from "../person/interface";
 
 export const deleteGroupByID = async (id: string | null | undefined) => {
     const group = await groupModel.findById(id);
@@ -21,13 +23,25 @@ export const createGroup = (groupName: string) => {
 };
 
 export const updateGroupByID = async (group: IGroup, groupID: string) => {
+    const foundGroup = await groupModel.findById(groupID);
+    if(foundGroup)
+        foundGroup.people.forEach( async (person: any) => {
+            let foundPerson: IPerson | null = await personModel.findById(person);
+
+            if(foundPerson)
+            {
+                let personGroups: string[] = (foundPerson?.groups as string[]);
+                personGroups.push(groupID);
+                await personModel.findByIdAndUpdate(person, { firstName: foundPerson.firstName, lastName: foundPerson.lastName,
+                                                age: foundPerson.age, groups: personGroups});
+            }
+        });
     return groupModel.findByIdAndUpdate(groupID, group);
 };
 
-export const getAllGroupsAndPeopleInGroup = async (id: string): Promise<any[]> => {
-    const groups = await getGroupByID(id);
-    const persons = await getGroupByID(id);
-    return [groups, persons];
+export const getAllGroupsAndPeopleInGroup = async (id: string) => {
+    const group = await groupModel.findById(id);
+    return groupModel.findById(id).populate('groups').populate('people');
 };
 
 export const getGroupByID = (id: string) => {

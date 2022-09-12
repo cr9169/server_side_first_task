@@ -27,6 +27,6 @@ export const getAllGroupsOfPersonM = (id: string) => {
 };
 
 export const populatePeople = () => {
-    return personModel.find().populate('group');
+    return personModel.find().populate('groups');
 }
 

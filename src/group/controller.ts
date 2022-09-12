@@ -14,7 +14,7 @@ export const createGroupC = async (req:express.Request, res:express.Response) =>
 };
 
 export const updateGroupByIDC = async (req:express.Request, res:express.Response) => {
-    res.json(await updateGroupByIDM(req.body, req.params.groupID));
+    res.json(await updateGroupByIDM(req.body, req.params.id));
 };
 
 export const getAllGroupsAndPeopleInGroupC = async (req:express.Request, res:express.Response) => {

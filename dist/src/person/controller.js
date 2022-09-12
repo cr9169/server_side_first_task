@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllGroupsOfPersonC = exports.getPersonInGroupByNameC = exports.updatePersonByIDC = exports.createPersonC = exports.deletePersonByIDC = exports.getPersonByIDC = void 0;
+exports.getPopulatedPeople = exports.getAllGroupsOfPersonC = exports.getPersonInGroupByNameC = exports.updatePersonByIDC = exports.createPersonC = exports.deletePersonByIDC = exports.getPersonByIDC = void 0;
 const manager_1 = require("./manager");
 const getPersonByIDC = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(yield (0, manager_1.getPersonByIDM)(req.params.id));
@@ -28,11 +28,15 @@ const updatePersonByIDC = (req, res) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.updatePersonByIDC = updatePersonByIDC;
 const getPersonInGroupByNameC = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.json(yield (0, manager_1.getPersonInGroupByNameM)(req.params.name, req.params.groupID));
+    res.json(yield (0, manager_1.getPersonInGroupByNameM)(req.params.name, req.params.id));
 });
 exports.getPersonInGroupByNameC = getPersonInGroupByNameC;
 const getAllGroupsOfPersonC = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(yield (0, manager_1.getAllGroupsOfPersonM)(req.params.id));
 });
 exports.getAllGroupsOfPersonC = getAllGroupsOfPersonC;
+const getPopulatedPeople = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json(yield (0, manager_1.populatePeople)());
+});
+exports.getPopulatedPeople = getPopulatedPeople;
 //# sourceMappingURL=controller.js.map
