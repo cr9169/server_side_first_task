@@ -58,14 +58,17 @@ export const updatePersonByID = async (person: IPerson, id: string) => {
 };
 
 export const getPersonInGroupByName = async (name: string, groupID: string) => {
-    let personFound = null;
-    const group = await getGroupByID(groupID);
-    await group?.people.forEach( async (person) => {
-        if (await personModel.findById(person).equals(name))
-            personFound = await getPersonByID(person as string);
-    });
+    let personFound: IPerson | null = null;
+    const group = await groupModel.findById(groupID);
 
-    return personFound; 
+    if(!group) {
+        return 'group not found';
+    }
+    for(const person of group.people) {
+        personFound = await personModel.findById(person);
+        if (personFound && personFound.firstName == name)
+            return personModel.findById(person).populate('groups');
+    }
 };
 
 export const getAllGroupsOfPerson = async (id: string) => {

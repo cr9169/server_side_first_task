@@ -9,7 +9,7 @@ groupRoute.get("group/populated", getPopulatedGroups); //
 
 groupRoute.delete("/group/:id", deleteGroupByIDC); //
   
-groupRoute.post("/group/:name", createGroupC);
+groupRoute.post("/group/:name", createGroupC); //
 groupRoute.post("/group/update/:id", updateGroupByIDC); //
 
 export default groupRoute;
