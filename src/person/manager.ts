@@ -22,8 +22,8 @@ export const getPersonInGroupByNameM = (name: string, groupID: string) => {
     return getPersonInGroupByName(name, groupID);
 };
 
-export const getAllGroupsOfPersonM = (id: string) => {
-    return getAllGroupsOfPerson(id);
+export const getAllGroupsOfPersonM = async(id: string) => {
+    return await getAllGroupsOfPerson(id);
 };
 
 export const populatePeople = () => {

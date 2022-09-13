@@ -43,4 +43,5 @@ function connect() {
         throw (0, http_errors_1.default)(501, "Unable to connect database");
     });
 }
+exports.default = app;
 //# sourceMappingURL=server.js.map

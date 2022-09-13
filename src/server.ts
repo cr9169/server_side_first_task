@@ -35,3 +35,5 @@ function connect() {
         throw createHttpError(501, "Unable to connect database");
       });
 }
+
+export default app;

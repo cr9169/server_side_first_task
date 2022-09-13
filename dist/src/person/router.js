@@ -8,7 +8,7 @@ const controller_1 = require("./controller");
 const personRoute = express_1.default.Router();
 personRoute.get("/person/:id", controller_1.getPersonByIDC);
 personRoute.get("/person/:name/:id", controller_1.getPersonInGroupByNameC);
-personRoute.get("/person/All/:id", controller_1.getAllGroupsOfPersonC);
+personRoute.get("/person/All/groups/:id", controller_1.getAllGroupsOfPersonC);
 personRoute.get("person/populated", controller_1.getPopulatedPeople);
 personRoute.delete("/person/:id", controller_1.deletePersonByIDC);
 personRoute.post("/person/", controller_1.createPersonC);

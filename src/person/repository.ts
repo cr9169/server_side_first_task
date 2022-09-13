@@ -1,11 +1,9 @@
 import { personModel } from "./model";
 import IPerson from "./interface";
-import {getGroupByID}  from "../group/repository";
 import { groupModel } from "../group/model";
 import IGroup from "../group/interface";
 
 export const getPersonByID = (id: string) => {
-    console.log(id);
     
     return personModel.findById(id) //.orFail(new Error('not found'));
 };
@@ -60,7 +58,7 @@ export const updatePersonByID = async (person: IPerson, id: string) => {
 export const getPersonInGroupByName = async (name: string, groupID: string) => {
     let personFound: IPerson | null = null;
     const group = await groupModel.findById(groupID);
-
+    
     if(!group) {
         return 'group not found';
     }
@@ -72,6 +70,8 @@ export const getPersonInGroupByName = async (name: string, groupID: string) => {
 };
 
 export const getAllGroupsOfPerson = async (id: string) => {
-    return personModel.findById(id).populate('groups');
+    const prs = await personModel.findById(id).populate('groups');
+    console.log(prs);
+    return prs;
 };
 

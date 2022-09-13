@@ -13,7 +13,6 @@ exports.getAllGroupsOfPerson = exports.getPersonInGroupByName = exports.updatePe
 const model_1 = require("./model");
 const model_2 = require("../group/model");
 const getPersonByID = (id) => {
-    console.log(id);
     return model_1.personModel.findById(id);
 };
 exports.getPersonByID = getPersonByID;
@@ -65,18 +64,19 @@ const getPersonInGroupByName = (name, groupID) => __awaiter(void 0, void 0, void
     let personFound = null;
     const group = yield model_2.groupModel.findById(groupID);
     if (!group) {
-        return 'group not found!';
+        return 'group not found';
     }
     for (const person of group.people) {
         personFound = yield model_1.personModel.findById(person);
         if (personFound && personFound.firstName == name)
             return model_1.personModel.findById(person).populate('groups');
     }
-    console.error("cant find person");
 });
 exports.getPersonInGroupByName = getPersonInGroupByName;
 const getAllGroupsOfPerson = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return model_1.personModel.findById(id).populate('groups');
+    const prs = yield model_1.personModel.findById(id).populate('groups');
+    console.log(prs);
+    return prs;
 });
 exports.getAllGroupsOfPerson = getAllGroupsOfPerson;
 //# sourceMappingURL=repository.js.map
