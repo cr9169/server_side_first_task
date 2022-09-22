@@ -4,28 +4,28 @@ import IPerson from "../interfaces/personInterface";
 
 class PersonService {
 
-    static getAllPeople = async() => {
-        const people = await axios.get(`${config.API_BASE_URL}/person/AllPeople`);
+    static getAllPeople = async(): Promise<IPerson[]> => {
+        const people: IPerson[] = await axios.get(`${config.API_BASE_URL}/person/AllPeople`);
         return people;
     };
 
-    static getPersonByID = async(id: string) => {
-        const person = await axios.get(`${config.API_BASE_URL}/person/${id}`);
+    static getPersonByID = async(id: string): Promise<IPerson> => {
+        const person: IPerson = await axios.get(`${config.API_BASE_URL}/person/${id}`);
         return person;
     };
 
-    static deletePersonByID = async(id: string) => {
-        const person = await axios.delete(`${config.API_BASE_URL}/person/${id}`);
+    static deletePersonByID = async(id: string): Promise<IPerson> => {
+        const person: IPerson = await axios.delete(`${config.API_BASE_URL}/person/${id}`);
         return person;
     };
 
-    static updatePersonByID = async(id: string, person: IPerson) => {
-        const updatedPerson = await axios.post(`${config.API_BASE_URL}/person/update/${id}`);
+    static updatePersonByID = async(id: string, person: IPerson): Promise<IPerson> => {
+        const updatedPerson: IPerson = await axios.post(`${config.API_BASE_URL}/person/update/${id}`);
         return updatedPerson;
     };
 
-    static createPerson = async(person: IPerson) => {
-        const createdPerson = await axios.post(`${config.API_BASE_URL}/person`);
+    static createPerson = async(person: IPerson): Promise<IPerson> => {
+        const createdPerson: IPerson = await axios.post(`${config.API_BASE_URL}/person`);
         return createdPerson;
     };
 
