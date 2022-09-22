@@ -1,9 +1,13 @@
-import { getGroupByID, deleteGroupByID, createGroup, updateGroupByID, getAllGroupsAndPeopleInGroup } from "./repository";
+import { getGroupByID, deleteGroupByID, createGroup, updateGroupByID, getAllGroupsAndPeopleInGroup, getAllGroups } from "./repository";
 import IGroup from "./interface";
 import { groupModel } from "./model";
 
-export const getGroupByIDM = (id: string) => { // insert await to everty call to a function that return promise
+export const getGroupByIDM = (id: string) => { 
     return getGroupByID(id); 
+};
+
+export const getAllGroupsM = () => { 
+    return getAllGroups(); 
 };
 
 export const deleteGroupByIDM = (id: string) => {

@@ -47,3 +47,7 @@ export const getAllGroupsAndPeopleInGroup = async (id: string) => {
 export const getGroupByID = (id: string) => {
     return groupModel.findById(id); 
 };
+
+export const getAllGroups = () => {
+    return groupModel.find({}); 
+};

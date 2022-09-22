@@ -75,3 +75,6 @@ export const getAllGroupsOfPerson = async (id: string) => {
     return prs;
 };
 
+export const getAllPeople = async () => {
+    return personModel.find({});
+}
