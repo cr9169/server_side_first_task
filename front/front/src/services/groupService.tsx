@@ -2,7 +2,7 @@ import axios from "axios";
 import { config } from "../../src/config";
 import IGroup from "../interfaces/groupInterface";
 
-class GroupService {
+export class GroupService {
 
     static getAllGroups = async(): Promise<IGroup[]> => {
         const groups: IGroup[] = await axios.get(`${config.API_BASE_URL}/group/AllGroups`);
@@ -20,12 +20,12 @@ class GroupService {
     };
 
     static updateGroupByID = async(id: string, group: IGroup): Promise<IGroup> => {
-        const updatedGroup: IGroup = await axios.post(`${config.API_BASE_URL}/group/update/${id}`);
+        const updatedGroup: IGroup = await axios.post(`${config.API_BASE_URL}/group/update/${id}`, group);
         return updatedGroup;
     };
 
     static createGroup = async(group: IGroup): Promise<IGroup> => {
-        const createdGroup: IGroup = await axios.post(`${config.API_BASE_URL}/group`);
+        const createdGroup: IGroup = await axios.post(`${config.API_BASE_URL}/group`, group);
         return createdGroup;
     };
 

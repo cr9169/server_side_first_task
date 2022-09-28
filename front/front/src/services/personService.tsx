@@ -2,7 +2,7 @@ import axios from "axios";
 import { config } from "../../src/config";
 import IPerson from "../interfaces/personInterface";
 
-class PersonService {
+export class PersonService {
 
     static getAllPeople = async(): Promise<IPerson[]> => {
         const people: IPerson[] = await axios.get(`${config.API_BASE_URL}/person/AllPeople`);
@@ -20,12 +20,12 @@ class PersonService {
     };
 
     static updatePersonByID = async(id: string, person: IPerson): Promise<IPerson> => {
-        const updatedPerson: IPerson = await axios.post(`${config.API_BASE_URL}/person/update/${id}`);
+        const updatedPerson: IPerson = await axios.post(`${config.API_BASE_URL}/person/update/${id}`, person);
         return updatedPerson;
     };
 
     static createPerson = async(person: IPerson): Promise<IPerson> => {
-        const createdPerson: IPerson = await axios.post(`${config.API_BASE_URL}/person`);
+        const createdPerson: IPerson = await axios.post(`${config.API_BASE_URL}/person`, person);
         return createdPerson;
     };
 
