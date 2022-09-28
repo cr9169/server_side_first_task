@@ -31,7 +31,7 @@ const Groups: React.FC<IProps> = ({}) => {
 
     const deleteGroup = (index: number): void => {
         const newGroupList = groupsList;
-        const groupToDeleteID: string = newGroupList![index].; // how to get id by object (group)
+        const groupToDeleteID: string = newGroupList![index]._id; // how to get id by object (group)
         newGroupList?.splice(index, 1);
         setGroupsList([...newGroupList!]);
         GroupService.deleteGroupByID(groupToDeleteID);

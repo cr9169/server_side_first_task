@@ -29,7 +29,7 @@ const People: React.FC<IProps> = ({}) => {
 
     const deletePerson = (index: number): void => {
         const newPeopleList = peopleList;
-        const personToDeleteID: string = newPeopleList![index].; // how to get id by object (person)
+        const personToDeleteID: string = newPeopleList![index]._id; // how to get id by object (person)
         newPeopleList?.splice(index, 1);
         setPeopleList([...newPeopleList!]);
         PersonService.deletePersonByID(personToDeleteID);
