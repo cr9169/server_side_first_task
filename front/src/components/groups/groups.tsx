@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GroupService } from "../../services/groupService";
 import IGroup from "../../interfaces/groupInterface";
 import Button from "@mui/material/Button";
@@ -18,7 +18,9 @@ const Groups: React.FC<IProps> = ({}) => {
     const [open, setOpen] = React.useState(false);
     const [groupsList, setGroupsList] = useState<IGroup[]>();
 
-    // GroupService.getAllGroups().then((groups):void => { setGroupsList(groups) });
+    useEffect( () => {
+        GroupService.getAllGroups().then((groups):void => { setGroupsList(groups) });
+    })
 
     const handleClickOpen = () => {
         setOpen(true);

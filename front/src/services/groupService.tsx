@@ -4,10 +4,10 @@ import IGroup from "../interfaces/groupInterface";
 
 export class GroupService {
 
-    /*static getAllGroups = async(): Promise<IGroup[]> => {
-        const groups: IGroup[] = await axios.get(`${config.API_BASE_URL}group/AllGroups`, config.HEADERS);
+    static getAllGroups = async(): Promise<IGroup[]> => {
+        const groups: IGroup[] = await axios.get(`${config.API_BASE_URL}group/AllGroups`);
         return groups;
-    };*/
+    };
 
     static getGroupByID = async(id: string): Promise<IGroup> => {
         const group: IGroup = await axios.get(`${config.API_BASE_URL}/group/${id}`);

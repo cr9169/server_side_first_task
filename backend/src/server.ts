@@ -10,17 +10,12 @@ import cors from 'cors';
 const app = express();
 const PORT: number = config.SERVER_PORT;
 const db = uri;
-const corsOptions = {
-  origin: 'http://localhost:3001/',
-  optionsSuccessStatus: 200 
-}
 
+app.use(cors());
 app.use(express.json());
-
 app.use("/", personRoute);
 app.use("/", groupRoute);
 
-app.use(cors(corsOptions));
 app.use(() => {
   throw createHttpError(404, "Rute not found!");
 });
