@@ -16,11 +16,16 @@ interface IProps{
 const Groups: React.FC<IProps> = ({}) => {
 
     const [open, setOpen] = React.useState(false);
-    const [groupsList, setGroupsList] = useState<IGroup[]>();
+    const [groupsList, setGroupsList] = useState<IGroup[]>([]);
+
+    const fetchData = async () => {
+        setGroupsList(await GroupService.getAllGroups());
+    }   
 
     useEffect( () => {
-        GroupService.getAllGroups().then((groups):void => { setGroupsList(groups) });
-    })
+        fetchData();
+        console.log(groupsList);
+    });
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -40,7 +45,7 @@ const Groups: React.FC<IProps> = ({}) => {
 
     //add DB functionality to submition
     return (<div id="groups">
-        <div>{groupsList!.map((group: IGroup, index: number) =>
+        <div>{groupsList.length ? groupsList.map((group: IGroup, index: number) =>
             <div>
             <div>
                 <Button variant="outlined" onClick={handleClickOpen}>Edit</Button> 
@@ -83,7 +88,7 @@ const Groups: React.FC<IProps> = ({}) => {
             <div>{group!.people.map((person: string) => 
                 <p>{person}</p>
             )};</div>
-            </div>)}        
+            </div>):null}        
         </div>
     </div>);
 }
