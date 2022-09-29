@@ -7,7 +7,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-
 import "./groups.css"
 
 interface IProps{
@@ -19,7 +18,7 @@ const Groups: React.FC<IProps> = ({}) => {
     const [open, setOpen] = React.useState(false);
     const [groupsList, setGroupsList] = useState<IGroup[]>();
 
-    GroupService.getAllGroups().then((groups):void => { setGroupsList(groups) });
+    // GroupService.getAllGroups().then((groups):void => { setGroupsList(groups) });
 
     const handleClickOpen = () => {
         setOpen(true);

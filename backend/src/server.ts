@@ -5,16 +5,22 @@ import groupRoute from "./group/router";
 import mongoose from "mongoose";
 import createHttpError from "http-errors";
 import { errorHandler } from "../errorHandler";
+import cors from 'cors';
 
 const app = express();
 const PORT: number = config.SERVER_PORT;
 const db = uri;
+const corsOptions = {
+  origin: 'http://localhost:3001/',
+  optionsSuccessStatus: 200 
+}
 
 app.use(express.json());
 
 app.use("/", personRoute);
 app.use("/", groupRoute);
 
+app.use(cors(corsOptions));
 app.use(() => {
   throw createHttpError(404, "Rute not found!");
 });
