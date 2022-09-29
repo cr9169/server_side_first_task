@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PersonService } from "../../services/personService";
 import IPerson from "../../interfaces/personInterface";
 import Button from "@mui/material/Button";
@@ -16,8 +16,16 @@ interface IProps{
 const People: React.FC<IProps> = ({}) => {
 
     const [open, setOpen] = React.useState(false);
-    const [peopleList, setPeopleList] = useState<IPerson[]>();
-    PersonService.getAllPeople().then((people):void => { setPeopleList(people) });
+    const [peopleList, setPeopleList] = useState<IPerson[]>([]);
+
+    const fetchData = async () => {
+        setPeopleList(await PersonService.getAllPeople());
+    }   
+
+    useEffect( () => {
+        fetchData();
+        console.log(peopleList);
+    });
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -37,11 +45,11 @@ const People: React.FC<IProps> = ({}) => {
     
     //add DB functionality to submition
     return (<div id="people">
-        <div>{peopleList!.map((person: IPerson, index: number) =>
+        <div>{peopleList.length ? peopleList.map((person: IPerson, index: number) =>
             <div>
             <div>
             <div> 
-                <Button variant="outlined" onClick={handleClickOpen}>Edit</Button> 
+                <Button id="edit-button" variant="outlined" onClick={handleClickOpen}>Edit</Button> 
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>Edit Person</DialogTitle>
                     <DialogContent>
@@ -81,11 +89,11 @@ const People: React.FC<IProps> = ({}) => {
                 </Dialog>
             </div>
             </div>
-            <button onClick={() => deletePerson(index)}>delete</button>
+            <Button variant="outlined" id="delete-button" onClick={() => deletePerson(index)}>delete</Button>
             <div>{person!.groups.map((group: string) => 
                 <p>{group}</p>
             )};</div>
-            </div>)}        
+            </div>):null}        
         </div>
    </div>);
 }

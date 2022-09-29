@@ -7,6 +7,7 @@ export const getPersonByIDM = (id: string) => {
 };
 
 export const getAllPeopleM = () => {
+    
     return getAllPeople();
 };
 

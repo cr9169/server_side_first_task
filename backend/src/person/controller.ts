@@ -6,6 +6,7 @@ export const getPersonByIDC = async (req:express.Request, res:express.Response) 
 };
 
 export const getAllPeopleC = async (req:express.Request, res:express.Response) => {
+    
     res.json(await getAllPeopleM());
 };
 

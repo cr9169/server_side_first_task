@@ -15,11 +15,10 @@ app.use(cors());
 app.use(express.json());
 app.use("/", personRoute);
 app.use("/", groupRoute);
-
-app.use(() => {
-  throw createHttpError(404, "Rute not found!");
-});
 app.use(errorHandler);
+app.use(() => {
+  throw createHttpError(404, "Route not found!");
+});
 
 connect();
 

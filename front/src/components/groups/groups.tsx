@@ -48,7 +48,7 @@ const Groups: React.FC<IProps> = ({}) => {
         <div>{groupsList.length ? groupsList.map((group: IGroup, index: number) =>
             <div>
             <div>
-                <Button variant="outlined" onClick={handleClickOpen}>Edit</Button> 
+                <Button id="edit-button" variant="outlined" onClick={handleClickOpen}>Edit</Button> 
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>Edit Person</DialogTitle>
                     <DialogContent>
@@ -80,9 +80,9 @@ const Groups: React.FC<IProps> = ({}) => {
                     </DialogActions>
                 </Dialog>
             </div>
-            <button onClick={() => deleteGroup(index)}>delete</button>
+            <Button id="delete-button" variant="outlined" onClick={() => deleteGroup(index)}>delete</Button>
             <div>{group!.groups.map((group: string) => 
-                <p>{group}</p>
+                <p>{group ? group : " "}</p>
             )};</div>
             <br /><br />
             <div>{group!.people.map((person: string) => 

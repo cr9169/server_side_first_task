@@ -3,7 +3,7 @@ import { getPersonByIDC, deletePersonByIDC, createPersonC, updatePersonByIDC, ge
 
 const personRoute: Router = express.Router();
   
-personRoute.get("person/AllPeople", getAllPeopleC);
+personRoute.get("/person/All/The/People", getAllPeopleC);
 personRoute.get("/person/:id", getPersonByIDC); //
 personRoute.get("/person/:name/:id", getPersonInGroupByNameC); //
 personRoute.get("/person/All/groups/:id", getAllGroupsOfPersonC); // 
