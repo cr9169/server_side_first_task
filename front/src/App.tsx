@@ -1,10 +1,16 @@
-import React from 'react';
+import { useState } from 'react';
+import IGroup from './interfaces/groupInterface';
+import IPerson from './interfaces/personInterface';
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import People from './components/people/people';
 import Groups from './components/groups/groups';
 import './App.css';
 
 function App() {
+
+  const [peopleList, setPeopleList] = useState<IPerson[]>([]);
+  const [groupsList, setGroupsList] = useState<IGroup[]>([]);
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -19,8 +25,8 @@ function App() {
           </div>
         </nav>
         <Routes>
-          <Route path="/people" element={<People/>}/>
-          <Route path="/groups" element={<Groups/>}/>
+          <Route path="/people" element={<People peopleList={peopleList} setPeopleList={setPeopleList} groupsList={groupsList} setGroupsList={setGroupsList}/>}/>
+          <Route path="/groups" element={<Groups peopleList={peopleList} setPeopleList={setPeopleList} groupsList={groupsList} setGroupsList={setGroupsList}/>}/>
         </Routes>
       </BrowserRouter>
     </div>

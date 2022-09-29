@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { GroupService } from "../../services/groupService";
 import IGroup from "../../interfaces/groupInterface";
+import IPerson from "../../interfaces/personInterface";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import DialogContentText from '@mui/material/DialogContentText';
+import List from '@mui/material/List';
+import ListItemText from '@mui/material/ListItemText';
 import "./groups.css"
 
 interface IProps{
-
+    peopleList: IPerson[],
+    setPeopleList: React.Dispatch<React.SetStateAction<IPerson[]>>,
+    groupsList: IGroup[],
+    setGroupsList: React.Dispatch<React.SetStateAction<IGroup[]>>
 }
 
-const Groups: React.FC<IProps> = ({}) => {
+const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGroupsList}) => {
 
-    const [open, setOpen] = React.useState(false);
-    const [groupsList, setGroupsList] = useState<IGroup[]>([]);
+    const [openCreate, setOpenCreate] = React.useState(false);
+    const [openEdit, setOpenEdit] = React.useState(false);
 
     const fetchData = async () => {
         setGroupsList(await GroupService.getAllGroups());
@@ -27,12 +34,20 @@ const Groups: React.FC<IProps> = ({}) => {
         console.log(groupsList);
     });
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const handleClickOpenCreate = () => {
+        setOpenCreate(true);
     };
     
-    const handleClose = () => {
-        setOpen(false);
+    const handleCloseCreate = () => {
+        setOpenCreate(false);
+    };
+
+    const handleClickOpenEdit = () => {
+        setOpenEdit(true);
+    };
+    
+    const handleCloseEdit = () => {
+        setOpenEdit(false);
     };
 
     const deleteGroup = (index: number): void => {
@@ -46,10 +61,13 @@ const Groups: React.FC<IProps> = ({}) => {
     //add DB functionality to submition
     return (<div id="groups">
         <div>{groupsList.length ? groupsList.map((group: IGroup, index: number) =>
+            <div id="groups-single-card-div">
             <div>
-            <div>
-                <Button id="edit-button" variant="outlined" onClick={handleClickOpen}>Edit</Button> 
-                <Dialog open={open} onClose={handleClose}>
+                <div>
+                    <p>Group ID: &nbsp;&nbsp; {group._id}</p>
+                </div>
+                <Button id="edit-button" variant="outlined" onClick={handleClickOpenEdit}>Edit</Button> 
+                <Dialog open={openEdit} onClose={handleCloseEdit}>
                     <DialogTitle>Edit Person</DialogTitle>
                     <DialogContent>
                     <TextField
@@ -66,6 +84,16 @@ const Groups: React.FC<IProps> = ({}) => {
                         fullWidth
                         variant="standard"
                     />
+                    <DialogContentText>
+                        Current groups IDs in group: {} 
+                    </DialogContentText>
+                    <List component="div" role="group">
+                        {group.groups.map((group: string) => (
+                            <ListItemText>
+                                {group}
+                            </ListItemText>
+                        ))}
+                    </List>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -73,24 +101,83 @@ const Groups: React.FC<IProps> = ({}) => {
                         fullWidth
                         variant="standard"
                     />
+                    <DialogContentText>
+                        Current people IDs in group:
+                    </DialogContentText>
+                    <List component="div" role="group">
+                        {group.people.map((person: string) => (
+                            <ListItemText>
+                                {person}
+                            </ListItemText>
+                        ))}
+                    </List>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Subscribe</Button>
+                    <Button onClick={handleCloseEdit}>Cancel</Button>
+                    <Button onClick={handleCloseEdit}>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>
             <Button id="delete-button" variant="outlined" onClick={() => deleteGroup(index)}>delete</Button>
             <div>{group!.groups.map((group: string) => 
                 <p>{group ? group : " "}</p>
-            )};</div>
-            <br /><br />
-            <div>{group!.people.map((person: string) => 
+            )}</div>
+            <div id="fields-div">{group!.people.map((person: string) => 
                 <p>{person}</p>
-            )};</div>
+            )}</div>
             </div>):null}        
         </div>
-    </div>);
+        <Button id="create-button" variant="contained" size="large" onClick={handleClickOpenCreate}>
+            Add Group
+        </Button>
+        <Dialog open={openCreate} onClose={handleCloseCreate}>
+            <DialogTitle>Create Group</DialogTitle>
+            <DialogContent>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Name"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Groups to remove from list"
+                    fullWidth
+                    variant="standard"
+                />
+                <DialogContentText>
+                    Groups avaliable to group:
+                </DialogContentText>
+                <List component="div" role="group">
+                    {groupsList.map((group: IGroup) => (
+                        <ListItemText>
+                            {group._id}
+                            {group.name}
+                        </ListItemText>
+                    ))}
+                </List>
+                <DialogContentText>
+                    People avaliable to group:
+                </DialogContentText>
+                <List component="div" role="group">
+                    {peopleList.map((person: IPerson) => (
+                        <ListItemText>
+                            {person._id}
+                            {person.firstName}
+                            {person.lastName}
+                        </ListItemText>
+                    ))}
+                </List>
+            </DialogContent>
+            <DialogActions>
+            <Button onClick={handleCloseCreate}>Cancel</Button>
+            <Button onClick={handleCloseCreate}>Create</Button>
+            </DialogActions>
+        </Dialog>
+    </div>
+    );
 }
 
 export default Groups;
