@@ -29,6 +29,11 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         setPeopleList(await PersonService.getAllPeople());
     }   
 
+    const breakGroupsNamesInputsAndReturnArray = (namesInput: string): string[] => {
+
+        return namesInput.split(',').join(' ').trim().split(/\s+/);
+    }
+
     useEffect( () => {
         fetchData();
         console.log(peopleList);

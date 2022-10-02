@@ -25,6 +25,40 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     const [openCreate, setOpenCreate] = React.useState(false);
     const [openEdit, setOpenEdit] = React.useState(false);
 
+    const breakGroupsNamesInputsAndReturnArray = (namesInput: string): string[] => {
+
+        return namesInput.split(',').join(' ').trim().split(/\s+/);
+    }
+
+    const arrayToMatrix = (array: string[], elementsPerSubArray: number): string[][] => {
+        let matrix: string[][] = [], arrayIndex: number, matrixIndex: number;
+    
+        for (arrayIndex = 0, matrixIndex = -1; arrayIndex < array.length; arrayIndex++) {
+            if (arrayIndex % elementsPerSubArray === 0) {
+                matrixIndex++;
+                matrix[matrixIndex] = [];
+            }
+    
+            matrix[matrixIndex].push(array[arrayIndex]);
+        }
+    
+        return matrix;
+    }
+
+    const breakPeopleFullNamesInputsAndReturnMatrix = (namesInput: string): string[][] | null => {
+        let namesMatrix: string[][];
+        const namesArray: string[] = namesInput.split(',').join(' ').trim().split(/\s+/);
+    
+        if(namesArray.length%2 != 0)
+        {
+            alert("One of the people's first or last name is missing!");
+            return null; // have to check if the return of the function is'nt null before creating the object that will be inserted to the DB after submiting the dialog,
+                         // if it is indeed null just close the dialog without inserting anything to the DB.
+        }
+    
+        return arrayToMatrix(namesArray, 2);
+    }
+
     const fetchData = async () => {
         setGroupsList(await GroupService.getAllGroups());
     }   
