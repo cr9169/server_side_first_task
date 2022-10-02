@@ -12,6 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import "./people.css";
+import { GroupService } from "../../services/groupService";
 
 interface IProps{
     peopleList: IPerson[],
@@ -35,12 +36,14 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     const [firstNameUpdateValue, setFirstNameUpdateValue] = useState<string>("");
     const [lastNameUpdateValue, setLastNameUpdateValue] = useState<string>("");
     const [ageUpdateValue, setAgeUpdateValue] = useState<string>("");
-    const [groupsToRelateUpdateValue, setGroupsToRelateUpdateValue] = useState<string>("");
-    
+    const [groupsToRelateUpdateValue, setGroupsToRelateUpdateValue] = useState<string>(""); 
 
-    const fetchData = async () => {
-        setPeopleList(await PersonService.getAllPeople());
-    }   
+    const isNumber = (value: string | number): boolean => {
+       
+        return ((value != null) &&
+               (value !== '') &&
+               !isNaN(Number(value.toString())));
+    }
 
     const breakGroupsNamesInputsAndReturnArray = (namesInput: string): string[] => {
 
@@ -48,13 +51,17 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     }
 
     const doesArrayContainsOtherArray = (firstArray: string[], secondArray: string[]): boolean => {
-        return firstArray.every(group => secondArray.includes(group));
+        return secondArray.every(group => firstArray.includes(group));
     }
+
+    const fetchData = async () => {
+        setGroupsList(await GroupService.getAllGroups());
+        setPeopleList(await PersonService.getAllPeople());
+    }  
 
     useEffect( () => {
         fetchData();
-        console.log(peopleList);
-    });
+    },[]);
 
     const handleClickOpenCreate = () => {
         setOpenCreate(true);
@@ -83,10 +90,10 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const handeClickCreatePerson = async () => {
         const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateCreationValue);
-
+        
         const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups);
-
-        if(validate)
+        
+        if(validate && isNumber(ageCreationValue))
         {
             const person: IPerson = {
                 firstName: firstNameCreationValue,

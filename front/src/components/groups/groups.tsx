@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GroupService } from "../../services/groupService";
+import { PersonService } from "../../services/personService";
 import IGroup from "../../interfaces/groupInterface";
 import IPerson from "../../interfaces/personInterface";
 import Button from "@mui/material/Button";
@@ -42,17 +43,17 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     }
 
     const doesArrayContainsOtherArray = (firstArray: string[], secondArray: string[]): boolean => {
-        return firstArray.every(group => secondArray.includes(group));
+        return secondArray.every(group => firstArray.includes(group));
     }
     
     const fetchData = async () => {
+        setPeopleList(await PersonService.getAllPeople());
         setGroupsList(await GroupService.getAllGroups());
     }   
 
     useEffect( () => {
         fetchData();
-        console.log(groupsList);
-    });
+    }, []);
 
     const handleClickOpenCreate = () => {
         setOpenCreate(true);
@@ -87,6 +88,9 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups) &&
             doesArrayContainsOtherArray(peopleList.map(person => person._id!), people);
 
+    
+        console.log(people, peopleList);
+            
         if(validate)
         {
             const group: IGroup = {
