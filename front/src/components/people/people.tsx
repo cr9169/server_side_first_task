@@ -22,9 +22,21 @@ interface IProps{
 
 const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGroupsList}) => {
 
-    const [openCreate, setOpenCreate] = React.useState(false);
-    const [openEdit, setOpenEdit] = React.useState(false);
-    // const [currentPersonID, setcurrentPersonID] = React.useState("");
+    const [openCreate, setOpenCreate] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+
+    // create: 
+    const [firstNameCreationValue, setFirstNameCreationValue] = useState<string>("");
+    const [lastNameCreationValue, setLastNameCreationValue] = useState<string>("");
+    const [ageCreationValue, setAgeCreationValue] = useState<string>("");
+    const [groupsToRelateCreationValue, setGroupsToRelateCreationValue] = useState<string>("");
+
+    // update:
+    const [firstNameUpdateValue, setFirstNameUpdateValue] = useState<string>("");
+    const [lastNameUpdateValue, setLastNameUpdateValue] = useState<string>("");
+    const [ageUpdateValue, setAgeUpdateValue] = useState<string>("");
+    const [groupsToRelateUpdateValue, setGroupsToRelateUpdateValue] = useState<string>("");
+    
 
     const fetchData = async () => {
         setPeopleList(await PersonService.getAllPeople());
@@ -33,6 +45,10 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     const breakGroupsNamesInputsAndReturnArray = (namesInput: string): string[] => {
 
         return namesInput.split(',').join(' ').trim().split(/\s+/);
+    }
+
+    const doesArrayContainsOtherArray = (firstArray: string[], secondArray: string[]): boolean => {
+        return firstArray.every(group => secondArray.includes(group));
     }
 
     useEffect( () => {
@@ -57,17 +73,48 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         setOpenEdit(false);
     };
 
-    const handeClickCreatePerson = () => {
-        
-    };
-
     const deletePerson = (index: number): void => {
         const newPeopleList = peopleList;
-        const personToDeleteID: string = newPeopleList![index]._id; // how to get id by object (person)
+        const personToDeleteID: string = newPeopleList![index]._id!; // how to get id by object (person)
         newPeopleList?.splice(index, 1);
         setPeopleList([...newPeopleList!]);
         PersonService.deletePersonByID(personToDeleteID);
     }
+
+    const handeClickCreatePerson = async () => {
+        const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateCreationValue);
+
+        const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups);
+
+        if(validate)
+        {
+            const person: IPerson = {
+                firstName: firstNameCreationValue,
+                lastName: lastNameCreationValue,
+                age: Number(ageCreationValue),
+                groups: groups,
+            };
+
+            await PersonService.createPerson(person);
+
+            const newPersonList: IPerson[] = peopleList;
+            newPersonList.push(person);
+            setPeopleList(newPersonList);
+        }
+
+        else {
+            await alert("group does'nt exists!");
+        }
+
+        handleCloseCreate();
+    };
+
+
+    const handeClickUpdatePerson = () => { // check if inputs (states) are actually in the DB.
+        //let breakPeopleFullNamesInputsAndReturnMatrix()
+        //GroupService.createGroup({})
+        handleCloseEdit();
+    };
     
     //add DB functionality to submition
     return (<div id="people">
@@ -78,7 +125,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 <div>
                     <p>Person ID: &nbsp;&nbsp; {person._id}</p>
                 </div>
-                <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(person._id)}>Edit</Button> 
+                <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(person._id!)}>Edit</Button> 
                 <Dialog open={openEdit} onClose={handleCloseEdit}>
                     <DialogTitle>Edit Person</DialogTitle>
                     <DialogContent>
@@ -88,6 +135,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         label="First Name"
                         fullWidth
                         variant="standard"
+                        onChange={(firstNameUpdateValue) => setFirstNameUpdateValue(firstNameUpdateValue.target.value)}
+                        value={firstNameUpdateValue}
                     />
                     <TextField
                         autoFocus
@@ -95,6 +144,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         label="Last Name"
                         fullWidth
                         variant="standard"
+                        onChange={(lastNameUpdateValue) => setLastNameUpdateValue(lastNameUpdateValue.target.value)}
+                        value={lastNameUpdateValue}
                     />
                     <TextField
                         autoFocus
@@ -102,6 +153,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         label="Age"
                         fullWidth
                         variant="standard"
+                        onChange={(ageUpdateValue) => setAgeUpdateValue(ageUpdateValue.target.value)}
+                        value={ageUpdateValue}
                     />
                     <TextField
                         autoFocus
@@ -109,6 +162,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         label="Groups to relate to person"
                         fullWidth
                         variant="standard"
+                        onChange={(groupsToRelateUpdateValue) => setGroupsToRelateUpdateValue(groupsToRelateUpdateValue.target.value)}
+                        value={groupsToRelateUpdateValue}
                     />
                     <DialogContentText>
                         Current groups related to person: {} 
@@ -158,6 +213,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 label="First Name"
                 fullWidth
                 variant="standard"
+                onChange={(firstNameCreationValue) => setFirstNameCreationValue(firstNameCreationValue.target.value)}
+                value={firstNameCreationValue}
             />
             <TextField
                 autoFocus
@@ -165,6 +222,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 label="Last Name"
                 fullWidth
                 variant="standard"
+                onChange={(lastNameCreationValue) => setLastNameCreationValue(lastNameCreationValue.target.value)}
+                value={lastNameCreationValue}
             />
             <TextField
                 autoFocus
@@ -172,6 +231,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 label="Age"
                 fullWidth
                 variant="standard"
+                onChange={(ageCreationValue) => setAgeCreationValue(ageCreationValue.target.value)}
+                value={ageCreationValue}
             />
             <TextField
                 autoFocus
@@ -179,6 +240,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 label="Groups to relate the person to"
                 fullWidth
                 variant="standard"
+                onChange={(groupsToRelateCreationValue) => setGroupsToRelateCreationValue(groupsToRelateCreationValue.target.value)}
+                value={groupsToRelateCreationValue}
             />
             <DialogContentText>
                 Groups available to person: 
@@ -196,7 +259,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             </DialogContent>
             <DialogActions>
             <Button onClick={handleCloseCreate}>Cancel</Button>
-            <Button onClick={handleCloseCreate}>Create</Button>
+            <Button onClick={handeClickCreatePerson}>Create</Button>
             </DialogActions>
         </Dialog>
    </div>)

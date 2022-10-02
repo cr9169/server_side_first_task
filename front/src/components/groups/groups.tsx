@@ -22,51 +22,29 @@ interface IProps{
 
 const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGroupsList}) => {
 
-    const [openCreate, setOpenCreate] = React.useState(false);
-    const [openEdit, setOpenEdit] = React.useState(false);
-    const [currentGroupID, setCurrentGroupID] = React.useState("");
-    const [nameCreationValue, setNameCreationValue] = React.useState("");
-    const [groupsToRelateCreationValue, setGroupsToRelateCreationValue] = React.useState("");
-    const [peopleToRelateCreationValue, setPeopleToRelateCreationValue] = React.useState("");
-    const [groupsToRelateUpdateValue, setGroupsToRelateUpdateValue] = React.useState("");
-    const [nameToUpdateValue, setNameToUpdateValue] = React.useState("");
-    const [peopleToRelateUpdateValue, setPeopleToRelateUpdateValue] = React.useState("");
-    
+    const [openCreate, setOpenCreate] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [currentGroupID, setCurrentGroupID] = useState("");
+
+    // create: 
+    const [nameCreationValue, setNameCreationValue] = useState<string>("");
+    const [groupsToRelateCreationValue, setGroupsToRelateCreationValue] = useState<string>("");
+    const [peopleToRelateCreationValue, setPeopleToRelateCreationValue] = useState<string>("");
+
+    // update:
+    const [nameToUpdateValue, setNameToUpdateValue] = useState<string>("");
+    const [groupsToRelateUpdateValue, setGroupsToRelateUpdateValue] = useState<string>("");
+    const [peopleToRelateUpdateValue, setPeopleToRelateUpdateValue] = useState<string>("");
 
     const breakGroupsNamesInputsAndReturnArray = (namesInput: string): string[] => {
 
         return namesInput.split(',').join(' ').trim().split(/\s+/);
     }
 
-    const arrayToMatrix = (array: string[], elementsPerSubArray: number): string[][] => {
-        let matrix: string[][] = [], arrayIndex: number, matrixIndex: number;
-    
-        for (arrayIndex = 0, matrixIndex = -1; arrayIndex < array.length; arrayIndex++) {
-            if (arrayIndex % elementsPerSubArray === 0) {
-                matrixIndex++;
-                matrix[matrixIndex] = [];
-            }
-    
-            matrix[matrixIndex].push(array[arrayIndex]);
-        }
-    
-        return matrix;
+    const doesArrayContainsOtherArray = (firstArray: string[], secondArray: string[]): boolean => {
+        return firstArray.every(group => secondArray.includes(group));
     }
-
-    const breakPeopleFullNamesInputsAndReturnMatrix = (namesInput: string): string[][] | null => {
-        let namesMatrix: string[][];
-        const namesArray: string[] = namesInput.split(',').join(' ').trim().split(/\s+/);
     
-        if(namesArray.length%2 != 0)
-        {
-            alert("One of the people's first or last name is missing!");
-            return null; // have to check if the return of the function is'nt null before creating the object that will be inserted to the DB after submiting the dialog,
-                         // if it is indeed null just close the dialog without inserting anything to the DB.
-        }
-    
-        return arrayToMatrix(namesArray, 2);
-    }
-
     const fetchData = async () => {
         setGroupsList(await GroupService.getAllGroups());
     }   
@@ -95,16 +73,46 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const deleteGroup = (index: number): void => {
         const newGroupList = groupsList;
-        const groupToDeleteID: string = newGroupList![index]._id; // how to get id by object (group)
+        const groupToDeleteID: string = newGroupList![index]._id!; // how to get id by object (group)
         newGroupList?.splice(index, 1);
         setGroupsList([...newGroupList!]);
         GroupService.deleteGroupByID(groupToDeleteID);
     }
 
-    const handeClickCreatePerson = () => {
+    const handeClickCreateGroup = async () => { // check if inputs (states) are actually in the DB.
+
+        const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateCreationValue);
+        const people: string[] = breakGroupsNamesInputsAndReturnArray(peopleToRelateCreationValue);
+
+        const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups) &&
+            doesArrayContainsOtherArray(peopleList.map(person => person._id!), people);
+
+        if(validate)
+        {
+            const group: IGroup = {
+                name: nameCreationValue,
+                groups: groups,
+                people: people
+            };
+
+            await GroupService.createGroup(group);
+
+            const newGroupList: IGroup[] = groupsList;
+            newGroupList.push(group);
+            setGroupsList(newGroupList);
+        }
+
+        else {
+            await alert("group or person does'nt exists!");
+        }
+
         handleCloseCreate();
+    };
+
+    const handeClickUpdateGroup = () => { // check if inputs (states) are actually in the DB.
         //let breakPeopleFullNamesInputsAndReturnMatrix()
         //GroupService.createGroup({})
+        handleCloseEdit();
     };
     
     //add DB functionality to submition
@@ -115,7 +123,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 <div>
                     <p>Group ID: &nbsp;&nbsp; {group._id}</p>
                 </div>
-                <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(group._id)}>Edit</Button> 
+                <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(group._id!)}>Edit</Button> 
                 <Dialog open={openEdit} onClose={handleCloseEdit}>
                     <DialogTitle>Edit Person</DialogTitle>
                     <DialogContent>
@@ -196,7 +204,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleCloseEdit}>Cancel</Button>
-                    <Button onClick={handleCloseEdit}>Save</Button>
+                    <Button onClick={handeClickUpdateGroup}>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -273,7 +281,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             </DialogContent>
             <DialogActions>
             <Button onClick={handleCloseCreate}>Cancel</Button>
-            <Button onClick={handeClickCreatePerson}>Create</Button>
+            <Button onClick={handeClickCreateGroup}>Create</Button>
             </DialogActions>
         </Dialog>
     </div>
