@@ -11,7 +11,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContentText from '@mui/material/DialogContentText';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
-import "../people/people.css"
+import "./people.css";
 
 interface IProps{
     peopleList: IPerson[],
@@ -24,6 +24,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const [openCreate, setOpenCreate] = React.useState(false);
     const [openEdit, setOpenEdit] = React.useState(false);
+    // const [currentPersonID, setcurrentPersonID] = React.useState("");
 
     const fetchData = async () => {
         setPeopleList(await PersonService.getAllPeople());
@@ -47,12 +48,17 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         setOpenCreate(false);
     };
 
-    const handleClickOpenEdit = () => {
+    const handleClickOpenEdit = (id: string) => {
         setOpenEdit(true);
+        // setcurrentPersonID(id);
     };
     
     const handleCloseEdit = () => {
         setOpenEdit(false);
+    };
+
+    const handeClickCreatePerson = () => {
+        
     };
 
     const deletePerson = (index: number): void => {
@@ -72,7 +78,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 <div>
                     <p>Person ID: &nbsp;&nbsp; {person._id}</p>
                 </div>
-                <Button id="edit-button" variant="outlined" onClick={handleClickOpenEdit}>Edit</Button> 
+                <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(person._id)}>Edit</Button> 
                 <Dialog open={openEdit} onClose={handleCloseEdit}>
                     <DialogTitle>Edit Person</DialogTitle>
                     <DialogContent>
@@ -100,7 +106,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     <TextField
                         autoFocus
                         margin="dense"
-                        label="Groups to remove from list"
+                        label="Groups to relate to person"
                         fullWidth
                         variant="standard"
                     />
@@ -110,11 +116,22 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     <List component="div" role="group">
                         {person.groups.map((group: string) => (
                             <ListItemText>
-                                {group}
+                                id: {group}
                             </ListItemText>
                         ))}
                     </List>
-
+                    <DialogContentText>
+                        Groups avaliable to group:
+                    </DialogContentText>
+                    <List component="div" role="group">
+                        {groupsList.map((group: IGroup) => (
+                            <ListItemText>
+                                name: {group.name}
+                                <br />
+                                id: {group._id}
+                            </ListItemText>
+                        ))}
+                    </List>
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleCloseEdit}>Cancel</Button>
@@ -124,7 +141,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             </div>
             </div>
             <Button variant="outlined" id="delete-button" onClick={() => deletePerson(index)}>delete</Button>
-            <div id="fields-div"><br/>{person!.groups.map((group: string) => 
+            <div id="fields-div"><br/><br /> groups:{person!.groups.map((group: string) => 
                 <p>{group}</p>
             )}</div>
             </div>):null}        
@@ -169,8 +186,9 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             <List component="div" role="group">
                 {groupsList.map((group: IGroup) => (
                     <ListItemText>
-                        {group._id}
-                        {group.name}
+                        name: {group.name}
+                        <br />
+                        id: {group._id}
                     </ListItemText>
                 ))}
             </List>
