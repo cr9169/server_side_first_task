@@ -42,17 +42,17 @@ export const createPerson = async (person: IPerson) => {
 export const updatePersonByID = async (person: IPerson, id: string) => {
     const foundPerson = await personModel.findById(id);
     if(foundPerson)
-        foundPerson.groups.forEach( async (group: any) => {
+        foundPerson.groups.forEach( async (group: string) => {
             let foundGroup: IGroup | null = await groupModel.findById(group);
 
             if(foundGroup)
             {
-                let persons: string[] = (foundGroup?.people as string[]);
+                let persons: string[] = (foundGroup?.people);
                 persons.push(id);
                 await groupModel.findByIdAndUpdate(group, { groups: foundGroup.groups, people: persons});
             }
         });
-    return personModel.replaceOne(getPersonByID(id), person);
+    return personModel.findByIdAndUpdate(id, person);
 };
 
 export const getPersonInGroupByName = async (name: string, groupID: string) => {

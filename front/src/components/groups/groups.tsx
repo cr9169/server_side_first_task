@@ -33,7 +33,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     const [peopleToRelateCreationValue, setPeopleToRelateCreationValue] = useState<string>("");
 
     // update:
-    const [nameToUpdateValue, setNameToUpdateValue] = useState<string>("");
+    const [nameToUpdateValue, setNameToUpdateValue] = useState<string>(""); 
     const [groupsToRelateUpdateValue, setGroupsToRelateUpdateValue] = useState<string>("");
     const [peopleToRelateUpdateValue, setPeopleToRelateUpdateValue] = useState<string>("");
 
@@ -74,27 +74,26 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const deleteGroup = (index: number): void => {
         const newGroupList = groupsList;
-        const groupToDeleteID: string = newGroupList![index]._id!; // how to get id by object (group)
+        const groupToDeleteID: string = newGroupList![index]._id!; 
         newGroupList?.splice(index, 1);
         setGroupsList([...newGroupList!]);
         GroupService.deleteGroupByID(groupToDeleteID);
     }
 
-    const handeClickCreateGroup = async () => { // check if inputs (states) are actually in the DB.
+    const handeClickCreateGroup = async () => { 
 
-        const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateCreationValue);
-        const people: string[] = breakGroupsNamesInputsAndReturnArray(peopleToRelateCreationValue);
+        const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateUpdateValue);
+        const people: string[] = breakGroupsNamesInputsAndReturnArray(peopleToRelateUpdateValue);
 
         const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups) &&
             doesArrayContainsOtherArray(peopleList.map(person => person._id!), people);
 
-    
         console.log(people, peopleList);
-            
+
         if(validate)
         {
             const group: IGroup = {
-                name: nameCreationValue,
+                name: nameToUpdateValue,
                 groups: groups,
                 people: people
             };
@@ -113,10 +112,37 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         handleCloseCreate();
     };
 
-    const handeClickUpdateGroup = () => { // check if inputs (states) are actually in the DB.
-        //let breakPeopleFullNamesInputsAndReturnMatrix()
-        //GroupService.createGroup({})
-        handleCloseEdit();
+    const handeClickUpdateGroup = async (id: string) => { 
+
+        const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateCreationValue);
+        const people: string[] = breakGroupsNamesInputsAndReturnArray(peopleToRelateCreationValue);
+
+        const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups) &&
+            doesArrayContainsOtherArray(peopleList.map(person => person._id!), people);
+
+        console.log(people, peopleList);
+            
+        if(validate)
+        {
+            const group: IGroup = {
+                name: nameCreationValue,
+                groups: groups,
+                people: people
+            };
+
+            await GroupService.updateGroupByID(id, group);
+
+                const newGroupList: IGroup[] = groupsList;
+                let groupIndex: number = groupsList.findIndex(group => group._id === id);
+                newGroupList[groupIndex] = group;
+                setGroupsList(newGroupList);
+        }
+
+        else {
+            alert("group or person does'nt exists!");
+        }
+
+        handleCloseCreate();
     };
     
     //add DB functionality to submition
@@ -216,7 +242,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleCloseEdit}>Cancel</Button>
-                    <Button onClick={handeClickUpdateGroup}>Save</Button>
+                    <Button onClick={() => handeClickUpdateGroup(group._id!)}>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>

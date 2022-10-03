@@ -73,7 +73,6 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const handleClickOpenEdit = (id: string) => {
         setOpenEdit(true);
-        // setcurrentPersonID(id);
     };
     
     const handleCloseEdit = () => {
@@ -126,16 +125,51 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     };
 
 
-    const handeClickUpdatePerson = () => { // check if inputs (states) are actually in the DB.
-        //let breakPeopleFullNamesInputsAndReturnMatrix()
-        //GroupService.createGroup({})
+    const handeClickUpdatePerson = async (id: string) => { 
+        
+        const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateUpdateValue);
+        
+        const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups);
+        
+        console.log(validate);
+        console.log(isNumber(ageUpdateValue));
+        
+        if(!isNumber(ageUpdateValue))
+        {
+            console.log("age is'nt valid!"); 
+            return;
+        }
+        
+        if(validate)
+        {
+            const person: IPerson = {
+                firstName: firstNameUpdateValue,
+                lastName: lastNameUpdateValue,
+                age: +ageUpdateValue,
+                groups: groups,
+            };
+
+            await PersonService.updatePersonByID(id, person);
+
+            const newPersonList: IPerson[] = peopleList;
+            let personIndex: number = peopleList.findIndex(person => person._id === id);
+            newPersonList[personIndex] = person;
+            setPeopleList(newPersonList);
+        }
+
+        else {
+            alert("group does'nt exists!");
+        }
+
+        
         handleCloseEdit();
     };
     
-    //add DB functionality to submition
+    console.log(peopleList);
     return (<div id="people">
         <div>{peopleList.length ? peopleList.map((person: IPerson, index: number) =>
             <div id="people-single-card-div">
+           
             <div>
             <div> 
                 <div>
@@ -145,6 +179,9 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 <Dialog open={openEdit} onClose={handleCloseEdit}>
                     <DialogTitle>Edit Person</DialogTitle>
                     <DialogContent>
+
+
+
                     <TextField
                         autoFocus
                         margin="dense"
@@ -210,10 +247,10 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleCloseEdit}>Cancel</Button>
-                    <Button onClick={handleCloseEdit}>Save</Button>
+                    <Button onClick={() => handeClickUpdatePerson(person._id!)}>Save</Button> 
                     </DialogActions>
                 </Dialog>
-            </div>
+            </div> 
             </div>
             <Button variant="outlined" id="delete-button" onClick={() => deletePerson(index)}>delete</Button>
             <div id="fields-div"><br/><br /> groups:{person!.groups.map((group: string) => 

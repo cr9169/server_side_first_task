@@ -40,7 +40,6 @@ export const updateGroupByID = async (group: IGroup, groupID: string) => {
 };
 
 export const getAllGroupsAndPeopleInGroup = async (id: string) => {
-    const group = await groupModel.findById(id);
     return groupModel.findById(id).populate('groups').populate('people');
 };
 

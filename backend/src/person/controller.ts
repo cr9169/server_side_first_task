@@ -20,7 +20,7 @@ export const createPersonC = async (req:express.Request, res:express.Response) =
 };
 
 export const updatePersonByIDC = async (req:express.Request, res:express.Response) => {
-    res.json(await updatePersonByIDM(req.body, req.params.groupID));
+    res.json(await updatePersonByIDM(req.body, req.body._id));
 };
 
 export const getPersonInGroupByNameC = async (req:express.Request, res:express.Response) => {
