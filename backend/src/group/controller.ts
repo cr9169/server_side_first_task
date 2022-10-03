@@ -14,7 +14,7 @@ export const deleteGroupByIDC = async (req:express.Request, res:express.Response
 };
 
 export const createGroupC = async (req:express.Request, res:express.Response) => {
-    res.json(await createGroupM(req.params.name));
+    res.json(await createGroupM(req.body.name));
 };
 
 export const updateGroupByIDC = async (req:express.Request, res:express.Response) => {

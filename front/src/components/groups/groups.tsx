@@ -155,7 +155,9 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     <List component="div" role="group">
                         {group.groups.map((group: string) => (
                             <ListItemText>
+                                <hr />
                                 {group}
+                                <hr />
                             </ListItemText>
                         ))}
                     </List>
@@ -166,9 +168,11 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         {groupsList.map((group: IGroup) => (
                             currentGroupID !== group._id ? 
                             <ListItemText>
+                                <hr />
                                 name: {group.name}
                                 <br />
                                 id: {group._id}
+                                <hr />
                             </ListItemText>: null
                         ))}
                     </List>
@@ -187,7 +191,9 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     <List component="div" role="group">
                         {group.people.map((person: string) => (
                             <ListItemText>
+                                <hr />
                                 {person}
+                                <hr />
                             </ListItemText>
                         ))}
                     </List>
@@ -197,11 +203,13 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     <List component="div" role="group">
                         {peopleList.map((person: IPerson) => (
                             <ListItemText>
+                                <hr />
                                 first name: {person.firstName}
                                 <br />
                                 last name: {person.lastName}
                                 <br />
                                 id: {person._id}
+                                <hr />
                             </ListItemText>
                         ))}
                     </List>
@@ -253,9 +261,11 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 <List component="div" role="group">
                     {groupsList.map((group: IGroup) => (
                         <ListItemText>
+                            <hr />
                             name: {group.name}
                             <br />
                             id: {group._id}
+                            <hr />
                         </ListItemText>
                     ))}
                 </List>
@@ -274,11 +284,13 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 <List component="div" role="group">
                     {peopleList.map((person: IPerson) => (
                         <ListItemText>
+                            <hr />
                             first name: {person.firstName}
                             <br />
                             last name: {person.lastName}
                             <br />
                             id: {person._id}
+                            <hr />
                         </ListItemText>
                     ))}
                 </List>

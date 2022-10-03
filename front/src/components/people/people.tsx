@@ -93,26 +93,35 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         
         const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups);
         
-        if(validate && isNumber(ageCreationValue))
-        {
-            const person: IPerson = {
-                firstName: firstNameCreationValue,
-                lastName: lastNameCreationValue,
-                age: Number(ageCreationValue),
-                groups: groups,
-            };
+        console.log(validate);
+        
+        if(isNumber(ageCreationValue))
+        {   
+            if(validate)
+            {
+                const person: IPerson = {
+                    firstName: firstNameCreationValue,
+                    lastName: lastNameCreationValue,
+                    age: Number(ageCreationValue),
+                    groups: groups,
+                };
 
-            await PersonService.createPerson(person);
+                await PersonService.createPerson(person);
 
-            const newPersonList: IPerson[] = peopleList;
-            newPersonList.push(person);
-            setPeopleList(newPersonList);
+                const newPersonList: IPerson[] = peopleList;
+                newPersonList.push(person);
+                setPeopleList(newPersonList);
+            }
+
+            else {
+                await alert("group does'nt exists!");
+            }
         }
 
         else {
-            await alert("group does'nt exists!");
+            console.log("age is'nt valid!");
         }
-
+        
         handleCloseCreate();
     };
 
@@ -178,19 +187,23 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     <List component="div" role="group">
                         {person.groups.map((group: string) => (
                             <ListItemText>
+                                <hr />
                                 id: {group}
+                                <hr />
                             </ListItemText>
                         ))}
                     </List>
                     <DialogContentText>
-                        Groups avaliable to group:
+                        Groups avaliable to person:
                     </DialogContentText>
                     <List component="div" role="group">
                         {groupsList.map((group: IGroup) => (
                             <ListItemText>
+                                <hr />
                                 name: {group.name}
                                 <br />
                                 id: {group._id}
+                                <hr />
                             </ListItemText>
                         ))}
                     </List>
@@ -256,9 +269,11 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             <List component="div" role="group">
                 {groupsList.map((group: IGroup) => (
                     <ListItemText>
+                        <hr />
                         name: {group.name}
                         <br />
                         id: {group._id}
+                        <hr />
                     </ListItemText>
                 ))}
             </List>
