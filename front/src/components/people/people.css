@@ -1,0 +1,29 @@
+#people {
+    margin-top: 5vh;
+}
+
+#people-single-card-div {
+    padding: 10px 0 10px 10px;
+    border: 5px solid red;
+    margin-bottom: 1vh;
+}
+
+#edit-button {
+    margin-bottom: 1vh;
+}
+
+#delete-button {
+    margin-bottom: 5vh;
+}
+
+#fields-div {
+    margin-bottom: 6vh;
+}
+
+#create-button {
+    margin-top: 20px;
+}
+
+hr {
+    color: red;
+}

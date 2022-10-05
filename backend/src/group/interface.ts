@@ -1,9 +1,10 @@
 import IPerson from "../person/interface";
 
 export interface IGroup {
-    name: string
-    groups: string[] | IGroup[], // maybe change to an array of type IGroup
-    people: string[] | IPerson[] // maybe change to an array of type IPerson
+    _id?: string,
+    name: string,
+    groups: string[],
+    people: string[] 
 }
 
 export default IGroup;

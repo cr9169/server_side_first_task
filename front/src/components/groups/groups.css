@@ -1,0 +1,25 @@
+#groups {
+    margin-top: 5vh;
+}
+
+#groups-single-card-div {
+    padding: 10px 0 10px 10px;
+    border: 5px solid red;
+    margin-bottom: 1vh;
+}
+
+#edit-button {
+    margin-bottom: 1vh;
+}
+
+#delete-button {
+    margin-bottom: -5vh;
+}
+
+#fields-div {
+    margin-bottom: 6vh;
+}
+
+hr {
+    color: red;
+}

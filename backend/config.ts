@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
 
 export const config = {
@@ -6,4 +6,3 @@ export const config = {
 }
 
 export const uri = "mongodb://127.0.0.1:27017";
-
