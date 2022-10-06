@@ -16,18 +16,18 @@ export const deleteGroupByID = async (id: string | null | undefined) => {
 }
 
 
-export const createGroup = (groupName: string) => { // add also that groups could be able to be attached
-                                                    // to created group and update groups array of every group
-                                                    // attached to the created group (insert created group _id).
+export const createGroup = (groupName: string) => { 
+
     return groupModel.create({name: groupName,
-                              persons: [],
-                              groups: []});
+                              persons: [], 
+                              groups: []}); 
 };
 
 export const updateGroupByID = async (group: IGroup, groupID: string) => { // update also groups of group 
     const foundGroup = await groupModel.findById(groupID);
     if(foundGroup)
-        foundGroup.people.forEach( async (person: any) => {
+    {
+        foundGroup.people.forEach( async (person: string) => {
             let foundPerson: IPerson | null = await personModel.findById(person);
 
             if(foundPerson)
@@ -38,6 +38,18 @@ export const updateGroupByID = async (group: IGroup, groupID: string) => { // up
                                                 age: foundPerson.age, groups: personGroups});
             }
         });
+
+        foundGroup.groups.forEach( async (group: string) => {
+            let foundGroup: IGroup | null = await groupModel.findById(group);
+
+            if(foundGroup)
+            {
+                let groupGroups: string[] = (foundGroup?.groups as string[]);
+                groupGroups.push(groupID);
+                await groupModel.findByIdAndUpdate(group, { Name: foundGroup.name, people: foundGroup.people, groups: groupGroups});
+            }
+        });
+    }
     return groupModel.findByIdAndUpdate(groupID, group);
 };
 

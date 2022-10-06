@@ -42,6 +42,7 @@ export const createPerson = async (person: IPerson) => {
 export const updatePersonByID = async (person: IPerson, id: string) => { // check if the actuall function is the problem in the backend (or the frontend)
     const foundPerson = await personModel.findById(id);
     if(foundPerson)
+    {
         foundPerson.groups.forEach( async (group: string) => {
             let foundGroup: IGroup | null = await groupModel.findById(group);
 
@@ -52,6 +53,7 @@ export const updatePersonByID = async (person: IPerson, id: string) => { // chec
                 await groupModel.findByIdAndUpdate(group, { groups: foundGroup.groups, people: persons});
             }
         });
+    }
     return personModel.findByIdAndUpdate(id, person);
 };
 
