@@ -6,7 +6,7 @@ const groupRoute : Router = express.Router();
 groupRoute.get("/group/AllGroups", getAllGroupsC);
 groupRoute.get("/group/:id", getGroupByIDC); //
 groupRoute.get("/group/All/:id", getAllGroupsAndPeopleInGroupC); //
-groupRoute.get("group/populated", getPopulatedGroups); //
+groupRoute.get("/group/populated", getPopulatedGroups); //
 
 groupRoute.delete("/group/:id", deleteGroupByIDC); //
   

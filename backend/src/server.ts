@@ -16,9 +16,7 @@ app.use(express.json());
 app.use("/", personRoute);
 app.use("/", groupRoute);
 app.use(errorHandler);
-app.use(() => {
-  throw createHttpError(404, "Route not found!");
-});
+app.use((req, res) => res.status(404).send('Route not found!'));
 
 connect();
 

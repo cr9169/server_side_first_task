@@ -13,26 +13,18 @@ export const deletePersonByID = (id: string) => {
 };
 
 export const createPerson = async (person: IPerson) => {
-    let personID: any;
-    const createdPerson = await personModel.create(person, (err, onePerson) => 
-    {
-        console.log(onePerson)
-        if (err) 
-            { console.log(err); }
-        else
-            { personID = onePerson._id;
-                personID = personID.toString(); }
-    });
+    
+    const createdPerson: IPerson = await personModel.create(person);
 
-	person.groups.forEach( async (group) => {
-        const foundGroup : (IGroup | null) = await groupModel.findById(group as string);
+	createdPerson.groups.forEach( async (group) => {
+        const foundGroup : IGroup | null = await groupModel.findById(group);
         if(foundGroup)
         {
             let name: string = foundGroup.name;
-            let groups: string[] | IGroup[] = foundGroup.groups;
-            let persons: string[] | IPerson[] = foundGroup.people; 
-            persons.push(personID);
-            await groupModel.findByIdAndUpdate(foundGroup, { name: name, groups: groups, persons: persons });
+            let groups: string[] = foundGroup.groups;
+            let persons: string[] = foundGroup.people; 
+            persons.push(createdPerson._id!);
+            await groupModel.updateOne({_id: group}, { name: name, groups: groups, people: persons });
         }
         else
             console.error("cant find group");
@@ -44,17 +36,30 @@ export const updatePersonByID = async (person: IPerson, id: string) => { // chec
     if(foundPerson)
     {
         foundPerson.groups.forEach( async (group: string) => {
-            let foundGroup: IGroup | null = await groupModel.findById(group);
 
-            if(foundGroup)
-            {
-                let persons: string[] = (foundGroup?.people);
-                persons.push(id);
-                await groupModel.findByIdAndUpdate(group, { groups: foundGroup.groups, people: persons});
+            let foundGroup: IGroup | null = await groupModel.findById(group);
+            let groupGroups: string[] = (foundGroup?.groups as string[]);
+
+            if(!person.groups.includes(group))
+            {    
+                const index = groupGroups.indexOf(id, 0);
+                if (index > -1) {
+                    groupGroups.splice(index, 1);
+                }
             }
+
+            else 
+            {
+                if(!groupGroups.includes(id))
+                    groupGroups.push(id);
+            }
+
+            await personModel.updateOne({_id: person}, { firstName: foundPerson!.firstName, lastName: foundPerson!.lastName,
+                age: foundPerson!.age, groups: groupGroups});
         });
     }
-    return personModel.findByIdAndUpdate(id, person);
+
+    return personModel.findByIdAndUpdate(id, person, { new: true });
 };
 
 export const getPersonInGroupByName = async (name: string, groupID: string) => {
