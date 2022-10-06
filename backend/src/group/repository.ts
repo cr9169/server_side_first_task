@@ -16,13 +16,15 @@ export const deleteGroupByID = async (id: string | null | undefined) => {
 }
 
 
-export const createGroup = (groupName: string) => {
+export const createGroup = (groupName: string) => { // add also that groups could be able to be attached
+                                                    // to created group and update groups array of every group
+                                                    // attached to the created group (insert created group _id).
     return groupModel.create({name: groupName,
                               persons: [],
                               groups: []});
 };
 
-export const updateGroupByID = async (group: IGroup, groupID: string) => {
+export const updateGroupByID = async (group: IGroup, groupID: string) => { // update also groups of group 
     const foundGroup = await groupModel.findById(groupID);
     if(foundGroup)
         foundGroup.people.forEach( async (person: any) => {
