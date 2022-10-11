@@ -23,7 +23,7 @@ export const createPerson = async (person: IPerson) => {
             let name: string = foundGroup.name;
             let groups: string[] = foundGroup.groups;
             let persons: string[] = foundGroup.people; 
-            persons.push(createdPerson._id!);
+            persons.push(createdPerson._id!.toString());
             await groupModel.updateOne({_id: group}, { name: name, groups: groups, people: persons });
         }
         else
@@ -38,24 +38,23 @@ export const updatePersonByID = async (person: IPerson, id: string) => { // chec
         foundPerson.groups.forEach( async (group: string) => {
 
             let foundGroup: IGroup | null = await groupModel.findById(group);
-            let groupGroups: string[] = (foundGroup?.groups as string[]);
+            let groupPeople: string[] = (foundGroup?.groups as string[]);
 
             if(!person.groups.includes(group))
             {    
-                const index = groupGroups.indexOf(id, 0);
+                const index = groupPeople.indexOf(id, 0);
                 if (index > -1) {
-                    groupGroups.splice(index, 1);
+                    groupPeople.splice(index, 1);
                 }
             }
 
             else 
             {
-                if(!groupGroups.includes(id))
-                    groupGroups.push(id);
+                if(!groupPeople.includes(id))
+                    groupPeople.push(id);
             }
 
-            await personModel.updateOne({_id: person}, { firstName: foundPerson!.firstName, lastName: foundPerson!.lastName,
-                age: foundPerson!.age, groups: groupGroups});
+            await groupModel.updateOne({_id: group}, { people: groupPeople, groups: foundGroup?.groups});
         });
     }
 

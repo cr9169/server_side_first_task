@@ -24,9 +24,8 @@ export class GroupService {
         return updatedGroup;
     };
 
-    static createGroup = async(group: IGroup): Promise<IGroup> => {
-        const createdGroup: IGroup = await (await axios.post(`${config.API_BASE_URL}group`, group)).data;
+    static createGroup = async(groupName: string): Promise<IGroup> => {
+        const createdGroup: IGroup = await (await axios.post(`${config.API_BASE_URL}group`, groupName)).data;
         return createdGroup;
     };
-
 }

@@ -47,10 +47,14 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const breakGroupsNamesInputsAndReturnArray = (namesInput: string): string[] => {
 
+        if(namesInput === "")
+            return [];
         return namesInput.split(',').join(' ').trim().split(/\s+/);
     }
 
     const doesArrayContainsOtherArray = (firstArray: string[], secondArray: string[]): boolean => {
+        if(secondArray.length === 0)
+            return true;
         return secondArray.every(group => firstArray.includes(group));
     }
 
@@ -122,6 +126,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         }
         
         handleCloseCreate();
+        fetchData();
     };
 
 
@@ -163,6 +168,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
         
         handleCloseEdit();
+        fetchData();
     };
     
     console.log(peopleList);

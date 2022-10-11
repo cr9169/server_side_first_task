@@ -29,8 +29,6 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     // create: 
     const [nameCreationValue, setNameCreationValue] = useState<string>("");
-    const [groupsToRelateCreationValue, setGroupsToRelateCreationValue] = useState<string>("");
-    const [peopleToRelateCreationValue, setPeopleToRelateCreationValue] = useState<string>("");
 
     // update:
     const [nameToUpdateValue, setNameToUpdateValue] = useState<string>(""); 
@@ -39,10 +37,14 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const breakGroupsNamesInputsAndReturnArray = (namesInput: string): string[] => {
 
+        if(namesInput === "")
+            return [];
         return namesInput.split(',').join(' ').trim().split(/\s+/);
     }
 
     const doesArrayContainsOtherArray = (firstArray: string[], secondArray: string[]): boolean => {
+        if(secondArray.length === 0)
+            return true;
         return secondArray.every(group => firstArray.includes(group));
     }
     
@@ -82,14 +84,32 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const handeClickCreateGroup = async () => { 
 
+        const group: IGroup = {
+            name: nameCreationValue,
+            groups: [],
+            people: []
+        };
+
+            await GroupService.createGroup(nameCreationValue);
+
+            const newGroupList: IGroup[] = groupsList;
+            newGroupList.push(group);
+            setGroupsList(newGroupList);
+
+            handleCloseCreate();
+            fetchData();
+    };
+
+    const handeClickUpdateGroup = async (id: string) => { 
+        
         const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateUpdateValue);
         const people: string[] = breakGroupsNamesInputsAndReturnArray(peopleToRelateUpdateValue);
-
+        
         const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups) &&
             doesArrayContainsOtherArray(peopleList.map(person => person._id!), people);
-
-        console.log(people, peopleList);
-
+            
+        console.log(validate);
+        
         if(validate)
         {
             const group: IGroup = {
@@ -98,51 +118,25 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 people: people
             };
 
-            await GroupService.createGroup(group);
-
-            const newGroupList: IGroup[] = groupsList;
-            newGroupList.push(group);
-            setGroupsList(newGroupList);
-        }
-
-        else {
-            await alert("group or person does'nt exists!");
-        }
-
-        handleCloseCreate();
-    };
-
-    const handeClickUpdateGroup = async (id: string) => { 
-
-        const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateCreationValue);
-        const people: string[] = breakGroupsNamesInputsAndReturnArray(peopleToRelateCreationValue);
-
-        const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups) &&
-            doesArrayContainsOtherArray(peopleList.map(person => person._id!), people);
-
-        console.log(people, peopleList);
+            console.log(id);
             
-        if(validate)
-        {
-            const group: IGroup = {
-                name: nameCreationValue,
-                groups: groups,
-                people: people
-            };
-
             await GroupService.updateGroupByID(id, group);
 
                 const newGroupList: IGroup[] = groupsList;
                 let groupIndex: number = groupsList.findIndex(group => group._id === id);
+                console.log(groupIndex);
+                
                 newGroupList[groupIndex] = group;
                 setGroupsList(newGroupList);
+
         }
 
         else {
             alert("group or person does'nt exists!");
         }
 
-        handleCloseCreate();
+        handleCloseEdit();
+        fetchData();
     };
     
     //add DB functionality to submition
@@ -242,7 +236,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleCloseEdit}>Cancel</Button>
-                    <Button onClick={() => handeClickUpdateGroup(group._id!)}>Save</Button>
+                    <Button onClick={() => handeClickUpdateGroup(currentGroupID)}>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -272,54 +266,6 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     onChange={(nameCreationValue) => setNameCreationValue(nameCreationValue.target.value)}
                     value={nameCreationValue}
                 />
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    label="Groups to relate to group"
-                    fullWidth
-                    variant="standard"
-                    onChange={(groupsToRelateCreationValue) => setGroupsToRelateCreationValue(groupsToRelateCreationValue.target.value)}
-                    value={groupsToRelateCreationValue}
-                />
-                <DialogContentText>
-                    Groups avaliable to group:
-                </DialogContentText>
-                <List component="div" role="group">
-                    {groupsList.map((group: IGroup) => (
-                        <ListItemText>
-                            <hr />
-                            name: {group.name}
-                            <br />
-                            id: {group._id}
-                            <hr />
-                        </ListItemText>
-                    ))}
-                </List>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    label="People to relate to group"
-                    fullWidth
-                    variant="standard"
-                    onChange={(peopleToRelateCreationValue) => setPeopleToRelateCreationValue(peopleToRelateCreationValue.target.value)}
-                    value={peopleToRelateCreationValue}
-                />
-                <DialogContentText>
-                    People avaliable to group:
-                </DialogContentText>
-                <List component="div" role="group">
-                    {peopleList.map((person: IPerson) => (
-                        <ListItemText>
-                            <hr />
-                            first name: {person.firstName}
-                            <br />
-                            last name: {person.lastName}
-                            <br />
-                            id: {person._id}
-                            <hr />
-                        </ListItemText>
-                    ))}
-                </List>
             </DialogContent>
             <DialogActions>
             <Button onClick={handleCloseCreate}>Cancel</Button>
