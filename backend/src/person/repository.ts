@@ -59,7 +59,7 @@ export const updatePersonByID = async (person: IPerson, id: string) => { // chec
 
             else 
             {
-                if(!groupPeople?.includes(id))
+                if(groupPeople?.includes(id))
                     groupPeople?.push(id);
             }
 

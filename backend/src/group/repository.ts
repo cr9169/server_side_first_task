@@ -6,14 +6,26 @@ import IPerson from "../person/interface";
 export const deleteGroupByID = async (id: string | null | undefined) => {
     const group = await groupModel.findById(id);
 
+    await personModel.find({} , (err: Error, allPeople: IPerson[]) => {
+        if(err)
+            console.log("error in getting documents");
+            
+            allPeople.map(async (personFromAll) => {
+            if(personFromAll.groups.includes(group?._id))
+            personFromAll?.groups.splice(personFromAll?.groups.indexOf(group?._id), 1);
+                await personModel.updateOne({_id: personFromAll._id}, { firstName: personFromAll.firstName, lastName: personFromAll.lastName,
+                    age: personFromAll.age, groups: personFromAll?.groups});
+        })
+    })
+
     if (group?.groups.length == 0)
-        await groupModel.findOneAndRemove({_id:id});
+        return groupModel.findOneAndRemove({_id:id});
 
     else {
         const groups: string[] | undefined = group?.groups;
         groups?.forEach(async (group) => {
             await groupModel.findOneAndRemove({_id:group});
-            groupModel.find({} , (err: Error, allGroups: IGroup[]) => {
+            await groupModel.find({} , (err: Error, allGroups: IGroup[]) => {
                 if(err)
                     console.log("error in getting documents");
                     
@@ -46,46 +58,23 @@ export const updateGroupByID = async (group: IGroup, groupID: string) => { // up
         foundGroup.people.forEach( async (person: string) => {
 
             let foundPerson: IPerson | null = await personModel.findById(person);
-            let personGroups: string[] = (foundPerson?.groups as string[]);
+            let personGroups: string[] | undefined = (foundPerson?.groups); // האם יכול להיות מצב שהוא מקבל פה לא מוגדר ואז בכלל זה הפונקציה לא ממשיכה
 
+            console.log(personGroups, typeof(personGroups));
+            
             if(!group.people.includes(person))
             {    
-                const index = personGroups.indexOf(groupID, 0);
-                if (index > -1) {
-                    personGroups.splice(index, 1);
-                }
+                personGroups?.splice(personGroups.indexOf(groupID), 1);
             }
 
             else 
             {
-                if(!personGroups.includes(groupID))
-                    personGroups.push(groupID);
+                if(!personGroups?.includes(groupID))
+                    personGroups?.push(groupID);
             }
 
             await personModel.updateOne({_id: person}, { firstName: foundPerson!.firstName, lastName: foundPerson!.lastName,
                 age: foundPerson!.age, groups: personGroups});
-        });
-
-        foundGroup.groups.forEach( async (groupElement: string) => {
-
-            let foundGroup: IGroup | null = await groupModel.findById(groupElement);
-            let groupGroups: string[] = (foundGroup?.groups as string[]);
-
-            if(!group.groups.includes(groupElement))
-            {    
-                const index = groupGroups.indexOf(groupID, 0);
-                if (index > -1) {
-                    groupGroups.splice(index, 1);
-                }
-            }
-
-            else 
-            {
-                if(!groupGroups.includes(groupID))
-                    groupGroups.push(groupID);
-            }
-
-            await groupModel.updateOne({_id: groupElement}, { name: foundGroup!.name, people: foundGroup!.people, groups: groupGroups});
         });
     }
     return groupModel.updateOne({_id: groupID}, group);
