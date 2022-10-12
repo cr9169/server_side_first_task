@@ -47,23 +47,25 @@ export const updatePersonByID = async (person: IPerson, id: string) => { // chec
     const foundPerson = await personModel.findById(id);
     if(foundPerson)
     {
-        foundPerson.groups.forEach( async (group: string) => {
+        person.groups.forEach( async (group: string) => {
+            const personGroup: IGroup | null = await groupModel.findById(group);
+            if(!personGroup?.people.includes(id))
+                {
+                    const newPersonGroupPeople: string[] | undefined = personGroup?.people; 
+                    newPersonGroupPeople?.push(id);
+                    await groupModel.updateOne({_id: group}, { people: newPersonGroupPeople, groups: personGroup?.groups});
+                }
+        });
 
-            let foundGroup: IGroup | null = await groupModel.findById(group);
-            let groupPeople: string[] | undefined = (foundGroup?.people);
-
-            if(!person.groups.includes(group)) // 
-            {    
-                groupPeople?.splice(groupPeople.indexOf(id), 1);
-            }
-
-            else 
-            {
-                if(groupPeople?.includes(id))
-                    groupPeople?.push(id);
-            }
-
-            await groupModel.updateOne({_id: group}, { people: groupPeople, groups: foundGroup?.groups});
+        await groupModel.find({} , (err: Error, allGroups: IGroup[]) => {
+            if(err)
+                console.log("error in getting documents");
+                
+            allGroups.map(async (groupFromAll) => {
+                if((!person.groups.includes(groupFromAll._id!)) && groupFromAll.people.includes(id))
+                    groupFromAll?.people.splice(groupFromAll?.people.indexOf(id), 1);
+                    await groupModel.updateOne({_id: groupFromAll._id}, { people: groupFromAll?.people, groups: groupFromAll?.groups});
+            });
         });
     }
 

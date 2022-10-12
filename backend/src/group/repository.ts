@@ -55,30 +55,31 @@ export const updateGroupByID = async (group: IGroup, groupID: string) => { // up
     const foundGroup = await groupModel.findById(groupID);
     if(foundGroup)
     {
-        foundGroup.people.forEach( async (person: string) => {
+        group.people.forEach( async (person: string) => {
+            const groupPerson: IPerson | null = await personModel.findById(person);
+            if(!groupPerson?.groups.includes(groupID))
+                {
+                    const newGroupPersonGroups: string[] | undefined = groupPerson?.groups; 
+                    newGroupPersonGroups?.push(groupID);
+                    await personModel.updateOne({_id: person}, { firstName: groupPerson?.firstName,
+                        lastName: groupPerson?.lastName, age: groupPerson?.age, groups: newGroupPersonGroups});
+                }
+        });
 
-            let foundPerson: IPerson | null = await personModel.findById(person);
-            let personGroups: string[] | undefined = (foundPerson?.groups); // האם יכול להיות מצב שהוא מקבל פה לא מוגדר ואז בכלל זה הפונקציה לא ממשיכה
-
-            console.log(personGroups, typeof(personGroups));
-            
-            if(!group.people.includes(person))
-            {    
-                personGroups?.splice(personGroups.indexOf(groupID), 1);
-            }
-
-            else 
-            {
-                if(!personGroups?.includes(groupID))
-                    personGroups?.push(groupID);
-            }
-
-            await personModel.updateOne({_id: person}, { firstName: foundPerson!.firstName, lastName: foundPerson!.lastName,
-                age: foundPerson!.age, groups: personGroups});
+        await personModel.find({} , (err: Error, allPeople: IPerson[]) => {
+            if(err)
+                console.log("error in getting documents");
+                
+                allPeople.map(async (personFromAll) => {
+                if((!group.people.includes(personFromAll._id!)) && personFromAll.groups.includes(groupID))
+                    personFromAll?.groups.splice(personFromAll?.groups.indexOf(groupID), 1);
+                    await personModel.updateOne({_id: personFromAll._id}, { firstName: personFromAll?.firstName,
+                         lastName: personFromAll?.lastName, age: personFromAll?.age, groups: personFromAll.groups});
+            });
         });
     }
     return groupModel.updateOne({_id: groupID}, group);
-};
+}
 
 export const getAllGroupsAndPeopleInGroup = async (id: string) => {
     return groupModel.findById(id).populate('groups').populate('people');
