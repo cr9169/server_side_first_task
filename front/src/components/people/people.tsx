@@ -65,7 +65,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     useEffect( () => {
         fetchData();
-    },[]);
+    }, []);
 
     const handleClickOpenCreate = () => {
         setOpenCreate(true);
@@ -95,9 +95,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateCreationValue);
         
         const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups);
-        
-        console.log(validate);
-        
+                
         if(isNumber(ageCreationValue))
         {   
             if(validate)
@@ -136,9 +134,6 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         
         const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups);
         
-        console.log(validate);
-        console.log(isNumber(ageUpdateValue));
-        
         if(!isNumber(ageUpdateValue))
         {
             console.log("age is'nt valid!"); 
@@ -171,7 +166,6 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         fetchData();
     };
     
-    console.log(peopleList);
     return (<div id="people">
         <div>{peopleList.length ? peopleList.map((person: IPerson, index: number) =>
             <div id="people-single-card-div">

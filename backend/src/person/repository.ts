@@ -5,10 +5,22 @@ import IGroup from "../group/interface";
 
 export const getPersonByID = (id: string) => {
     
-    return personModel.findById(id) //.orFail(new Error('not found'));
+    return personModel.findById(id) 
 };
 
-export const deletePersonByID = (id: string) => {
+export const deletePersonByID = async (id: string) => {
+    const person = await personModel.findById(id);
+
+    if (person?.groups.length == 0)
+        return personModel.findOneAndRemove({_id:id});
+
+    const personGroups: string[] | undefined = person?.groups;
+    personGroups!.forEach(async (group) => {
+        const groupToUpdate: IGroup | null = await groupModel.findById(group);
+        groupToUpdate?.people.splice(groupToUpdate?.people.indexOf(id), 1);
+        await groupModel.updateOne({_id: group}, { people: groupToUpdate?.people, groups: groupToUpdate?.groups});
+    });
+
     return personModel.findOneAndRemove({_id:id});
 };
 

@@ -7,12 +7,30 @@ export const deleteGroupByID = async (id: string | null | undefined) => {
     const group = await groupModel.findById(id);
 
     if (group?.groups.length == 0)
-        return groupModel.findOneAndRemove({_id:id});
+        await groupModel.findOneAndRemove({_id:id});
 
-    const groups = group?.groups;
-    groups!.forEach(async (group) => {
-        await deleteGroupByID(group as string);
-    });
+    else {
+        const groups: string[] | undefined = group?.groups;
+        groups?.forEach(async (group) => {
+            await groupModel.findOneAndRemove({_id:group});
+            groupModel.find({} , (err: Error, allGroups: IGroup[]) => {
+                if(err)
+                    console.log("error in getting documents");
+                    
+                allGroups.map(async (groupFromAll) => {
+                    console.log(groupFromAll);
+                    
+                    if(groupFromAll.groups.includes(group))
+                        groupFromAll?.groups.splice(groupFromAll?.groups.indexOf(group), 1);
+                        await groupModel.updateOne({_id: groupFromAll._id}, { people: groupFromAll?.people, groups: groupFromAll?.groups});
+                })
+            })
+        });
+        
+        return await groupModel.findOneAndRemove({_id:id});
+    }
+
+    // see if return is needed here
 }
 
 

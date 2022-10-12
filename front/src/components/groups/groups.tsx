@@ -80,6 +80,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         newGroupList?.splice(index, 1);
         setGroupsList([...newGroupList!]);
         GroupService.deleteGroupByID(groupToDeleteID);
+        fetchData();
     }
 
     const handeClickCreateGroup = async () => { 
@@ -107,8 +108,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         
         const validate: boolean = doesArrayContainsOtherArray(groupsList.map(group => group._id!), groups) &&
             doesArrayContainsOtherArray(peopleList.map(person => person._id!), people);
-            
-        console.log(validate);
+
         
         if(validate)
         {
@@ -117,14 +117,11 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 groups: groups,
                 people: people
             };
-
-            console.log(id);
             
             await GroupService.updateGroupByID(id, group);
 
                 const newGroupList: IGroup[] = groupsList;
                 let groupIndex: number = groupsList.findIndex(group => group._id === id);
-                console.log(groupIndex);
                 
                 newGroupList[groupIndex] = group;
                 setGroupsList(newGroupList);
