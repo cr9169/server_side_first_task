@@ -25,7 +25,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const [openCreate, setOpenCreate] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-
+    const [currentPerson, setCurrentPerson] = useState<IPerson>();
+    
     // create: 
     const [firstNameCreationValue, setFirstNameCreationValue] = useState<string>("");
     const [lastNameCreationValue, setLastNameCreationValue] = useState<string>("");
@@ -75,8 +76,9 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         setOpenCreate(false);
     };
 
-    const handleClickOpenEdit = (id: string) => {
+    const handleClickOpenEdit = (person: IPerson) => {
         setOpenEdit(true);
+        setCurrentPerson(person);
     };
     
     const handleCloseEdit = () => {
@@ -128,7 +130,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     };
 
 
-    const handeClickUpdatePerson = async (id: string) => { 
+    const handeClickUpdatePerson = async (person: IPerson) => { 
         
         const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateUpdateValue);
         
@@ -142,18 +144,19 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         
         if(validate)
         {
-            const person: IPerson = {
+            const newPerson: IPerson = {
                 firstName: firstNameUpdateValue,
                 lastName: lastNameUpdateValue,
                 age: +ageUpdateValue,
                 groups: groups,
             };
-
-            await PersonService.updatePersonByID(id, person);
+            
+            await PersonService.updatePersonByID(person._id!, newPerson);
 
             const newPersonList: IPerson[] = peopleList;
-            let personIndex: number = peopleList.findIndex(person => person._id === id);
-            newPersonList[personIndex] = person;
+            let personIndex: number = peopleList.findIndex(person => person._id === person._id);
+            newPersonList[personIndex] = newPerson;
+            
             setPeopleList(newPersonList);
         }
 
@@ -175,13 +178,10 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 <div>
                     <p>Person ID: &nbsp;&nbsp; {person._id}</p>
                 </div>
-                <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(person._id!)}>Edit</Button> 
+                <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(person)}>Edit</Button> 
                 <Dialog open={openEdit} onClose={handleCloseEdit}>
                     <DialogTitle>Edit Person</DialogTitle>
                     <DialogContent>
-
-
-
                     <TextField
                         autoFocus
                         margin="dense"
@@ -222,7 +222,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         Current groups related to person: {} 
                     </DialogContentText>
                     <List component="div" role="group">
-                        {person.groups.map((group: string) => (
+                        {currentPerson?.groups.map((group: string) => (
                             <ListItemText>
                                 <hr />
                                 id: {group}
@@ -247,7 +247,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleCloseEdit}>Cancel</Button>
-                    <Button onClick={() => handeClickUpdatePerson(person._id!)}>Save</Button> 
+                    <Button onClick={() => handeClickUpdatePerson(currentPerson!)}>Save</Button> 
                     </DialogActions>
                 </Dialog>
             </div> 

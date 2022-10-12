@@ -10,6 +10,8 @@ function App() {
 
   const [peopleList, setPeopleList] = useState<IPerson[]>([]);
   const [groupsList, setGroupsList] = useState<IGroup[]>([]);
+  
+
 
   return (
     <div className="App">

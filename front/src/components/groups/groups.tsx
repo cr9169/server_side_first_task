@@ -25,7 +25,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
 
     const [openCreate, setOpenCreate] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [currentGroupID, setCurrentGroupID] = useState("");
+    const [currentGroup, setCurrentGroup] = useState<IGroup>();
 
     // create: 
     const [nameCreationValue, setNameCreationValue] = useState<string>("");
@@ -65,9 +65,9 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         setOpenCreate(false);
     };
 
-    const handleClickOpenEdit = (id: string) => {
+    const handleClickOpenEdit = (group: IGroup) => {
         setOpenEdit(true);
-        setCurrentGroupID(id);
+        setCurrentGroup(group);
     };
     
     const handleCloseEdit = () => {
@@ -101,7 +101,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             fetchData();
     };
 
-    const handeClickUpdateGroup = async (id: string) => { 
+    const handeClickUpdateGroup = async (group: IGroup) => { 
         
         const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateUpdateValue);
         const people: string[] = breakGroupsNamesInputsAndReturnArray(peopleToRelateUpdateValue);
@@ -112,18 +112,18 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         
         if(validate)
         {
-            const group: IGroup = {
+            const newGroup: IGroup = {
                 name: nameToUpdateValue,
                 groups: groups,
                 people: people
             };
             
-            await GroupService.updateGroupByID(id, group);
+            await GroupService.updateGroupByID(group._id!, newGroup);
 
                 const newGroupList: IGroup[] = groupsList;
-                let groupIndex: number = groupsList.findIndex(group => group._id === id);
+                let groupIndex: number = groupsList.findIndex(groupListElement => groupListElement._id === group._id);
                 
-                newGroupList[groupIndex] = group;
+                newGroupList[groupIndex] = newGroup;
                 setGroupsList(newGroupList);
 
         }
@@ -144,7 +144,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 <div>
                     <p>Group ID: &nbsp;&nbsp; {group._id}</p>
                 </div>
-                <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(group._id!)}>Edit</Button> 
+                <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(group)}>Edit</Button> 
                 <Dialog open={openEdit} onClose={handleCloseEdit}>
                     <DialogTitle>Edit Person</DialogTitle>
                     <DialogContent>
@@ -170,7 +170,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         Current groups IDs in group: 
                     </DialogContentText>
                     <List component="div" role="group">
-                        {group.groups.map((group: string) => (
+                        {currentGroup?.groups.map((group: string) => (
                             <ListItemText>
                                 <hr />
                                 {group}
@@ -183,7 +183,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     </DialogContentText>
                     <List component="div" role="group">
                         {groupsList.map((group: IGroup) => (
-                            currentGroupID !== group._id ? 
+                            currentGroup?._id !== group._id ? 
                             <ListItemText>
                                 <hr />
                                 name: {group.name}
@@ -206,7 +206,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         Current people IDs in group:
                     </DialogContentText>
                     <List component="div" role="group">
-                        {group.people.map((person: string) => (
+                        {currentGroup?.people.map((person: string) => (
                             <ListItemText>
                                 <hr />
                                 {person}
@@ -233,7 +233,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleCloseEdit}>Cancel</Button>
-                    <Button onClick={() => handeClickUpdateGroup(currentGroupID)}>Save</Button>
+                    <Button onClick={() => handeClickUpdateGroup(currentGroup!)}>Save</Button>
                     </DialogActions>
                 </Dialog>
             </div>

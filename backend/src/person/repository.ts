@@ -50,27 +50,24 @@ export const updatePersonByID = async (person: IPerson, id: string) => { // chec
         foundPerson.groups.forEach( async (group: string) => {
 
             let foundGroup: IGroup | null = await groupModel.findById(group);
-            let groupPeople: string[] = (foundGroup?.groups as string[]);
+            let groupPeople: string[] | undefined = (foundGroup?.people);
 
-            if(!person.groups.includes(group))
+            if(!person.groups.includes(group)) // 
             {    
-                const index = groupPeople.indexOf(id, 0);
-                if (index > -1) {
-                    groupPeople.splice(index, 1);
-                }
+                groupPeople?.splice(groupPeople.indexOf(id), 1);
             }
 
             else 
             {
-                if(!groupPeople.includes(id))
-                    groupPeople.push(id);
+                if(!groupPeople?.includes(id))
+                    groupPeople?.push(id);
             }
 
             await groupModel.updateOne({_id: group}, { people: groupPeople, groups: foundGroup?.groups});
         });
     }
 
-    return personModel.findByIdAndUpdate(id, person, { new: true });
+    return personModel.updateOne({_id: id}, person);
 };
 
 export const getPersonInGroupByName = async (name: string, groupID: string) => {

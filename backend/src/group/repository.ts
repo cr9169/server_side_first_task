@@ -18,15 +18,13 @@ export const deleteGroupByID = async (id: string | null | undefined) => {
                     console.log("error in getting documents");
                     
                 allGroups.map(async (groupFromAll) => {
-                    console.log(groupFromAll);
-                    
                     if(groupFromAll.groups.includes(group))
                         groupFromAll?.groups.splice(groupFromAll?.groups.indexOf(group), 1);
                         await groupModel.updateOne({_id: groupFromAll._id}, { people: groupFromAll?.people, groups: groupFromAll?.groups});
                 })
             })
         });
-        
+
         return await groupModel.findOneAndRemove({_id:id});
     }
 
