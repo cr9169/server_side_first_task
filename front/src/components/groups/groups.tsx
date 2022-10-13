@@ -3,6 +3,7 @@ import { GroupService } from "../../services/groupService";
 import { PersonService } from "../../services/personService";
 import IGroup from "../../interfaces/groupInterface";
 import IPerson from "../../interfaces/personInterface";
+import { Title } from "../customComponents/title";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -166,8 +167,9 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         onChange={(groupsToRelateValue) => setGroupsToRelateUpdateValue(groupsToRelateValue.target.value)}
                         value={groupsToRelateUpdateValue}
                     />
+                    <br /><br />
                     <DialogContentText>
-                        Current groups IDs in group: 
+                        <Title>{"Current groups IDs in group: "}</Title>
                     </DialogContentText>
                     <List component="div" role="group">
                         {currentGroup?.groups.map((group: string) => (
@@ -178,8 +180,9 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                             </ListItemText>
                         ))}
                     </List>
+                    <br /><br />
                     <DialogContentText>
-                        Groups avaliable to group:
+                        <Title>{"Groups avaliable to group:"}</Title>
                     </DialogContentText>
                     <List component="div" role="group">
                         {groupsList.map((group: IGroup) => (
@@ -202,8 +205,9 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         onChange={(peopleToRelateValue) => setPeopleToRelateUpdateValue(peopleToRelateValue.target.value)}
                         value={peopleToRelateUpdateValue}
                     />
+                    <br /><br />
                     <DialogContentText>
-                        Current people IDs in group:
+                        <Title>{"Current people IDs in group:"}</Title>
                     </DialogContentText>
                     <List component="div" role="group">
                         {currentGroup?.people.map((person: string) => (
@@ -214,8 +218,9 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                             </ListItemText>
                         ))}
                     </List>
+                    <br /><br />
                     <DialogContentText>
-                    People avaliable to group:
+                        <Title>{"People avaliable to group:"}</Title>
                     </DialogContentText>
                     <List component="div" role="group">
                         {peopleList.map((person: IPerson) => (

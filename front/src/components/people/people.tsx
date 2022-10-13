@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { PersonService } from "../../services/personService";
 import IPerson from "../../interfaces/personInterface";
 import IGroup from "../../interfaces/groupInterface";
+import { GroupService } from "../../services/groupService";
+import { Title } from "../customComponents/title";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -12,13 +14,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import "./people.css";
-import { GroupService } from "../../services/groupService";
 
 interface IProps{
     peopleList: IPerson[],
     setPeopleList: React.Dispatch<React.SetStateAction<IPerson[]>>,
     groupsList: IGroup[],
-    setGroupsList: React.Dispatch<React.SetStateAction<IGroup[]>>
+    setGroupsList: React.Dispatch<React.SetStateAction<IGroup[]>>,
 }
 
 const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGroupsList}) => {
@@ -220,8 +221,9 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                         onChange={(groupsToRelateUpdateValue) => setGroupsToRelateUpdateValue(groupsToRelateUpdateValue.target.value)}
                         value={groupsToRelateUpdateValue}
                     />
+                    <br /><br />
                     <DialogContentText>
-                        Current groups related to person: {} 
+                        <Title>{"Current groups related to person: "}</Title>
                     </DialogContentText>
                     <List component="div" role="group">
                         {currentPerson?.groups.map((group: string) => (
@@ -232,8 +234,9 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                             </ListItemText>
                         ))}
                     </List>
+                    <br /><br />
                     <DialogContentText>
-                        Groups avaliable to person:
+                    <Title>{"Groups avaliable to person:"}</Title>
                     </DialogContentText>
                     <List component="div" role="group">
                         {groupsList.map((group: IGroup) => (
@@ -302,8 +305,9 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 onChange={(groupsToRelateCreationValue) => setGroupsToRelateCreationValue(groupsToRelateCreationValue.target.value)}
                 value={groupsToRelateCreationValue}
             />
+            <br /><br />
             <DialogContentText>
-                Groups available to person: 
+                <Title>{"Groups available to person:"}</Title>
             </DialogContentText>
             <List component="div" role="group">
                 {groupsList.map((group: IGroup) => (
