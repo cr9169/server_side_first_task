@@ -151,6 +151,8 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 groups: groups,
             };
             
+            console.log(person, person._id);
+            
             await PersonService.updatePersonByID(person._id!, newPerson);
 
             const newPersonList: IPerson[] = peopleList;

@@ -66,16 +66,14 @@ export const updateGroupByID = async (group: IGroup, groupID: string) => { // up
                 }
         });
 
-        await personModel.find({} , (err: Error, allPeople: IPerson[]) => {
-            if(err)
-                console.log("error in getting documents");
-                
-                allPeople.map(async (personFromAll) => {
-                if((!group.people.includes(personFromAll._id!)) && personFromAll.groups.includes(groupID))
-                    personFromAll?.groups.splice(personFromAll?.groups.indexOf(groupID), 1);
-                    await personModel.updateOne({_id: personFromAll._id}, { firstName: personFromAll?.firstName,
-                         lastName: personFromAll?.lastName, age: personFromAll?.age, groups: personFromAll.groups});
-            });
+        const allPeople: IPerson[] = await personModel.find({});
+        allPeople.map(async (personFromAll) => {
+            if((!group.people.includes(personFromAll._id!)) && personFromAll.groups.includes(groupID))
+            {
+                personFromAll?.groups.splice(personFromAll?.groups.indexOf(groupID), 1);
+                await personModel.updateOne({_id: personFromAll._id}, { firstName: personFromAll?.firstName,
+                    lastName: personFromAll?.lastName, age: personFromAll?.age, groups: personFromAll.groups});
+            }
         });
     }
     return groupModel.updateOne({_id: groupID}, group);

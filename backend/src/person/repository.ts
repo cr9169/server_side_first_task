@@ -57,15 +57,13 @@ export const updatePersonByID = async (person: IPerson, id: string) => { // chec
                 }
         });
 
-        await groupModel.find({} , (err: Error, allGroups: IGroup[]) => {
-            if(err)
-                console.log("error in getting documents");
-                
-            allGroups.map(async (groupFromAll) => {
-                if((!person.groups.includes(groupFromAll._id!)) && groupFromAll.people.includes(id))
-                    groupFromAll?.people.splice(groupFromAll?.people.indexOf(id), 1);
-                    await groupModel.updateOne({_id: groupFromAll._id}, { people: groupFromAll?.people, groups: groupFromAll?.groups});
-            });
+        const allGroups: IGroup[] = await groupModel.find({});
+        allGroups.map(async (groupFromAll) => {
+            if((!person.groups.includes(groupFromAll._id!)) && groupFromAll.people.includes(id))
+            {
+                groupFromAll?.people.splice(groupFromAll?.people.indexOf(id), 1);
+                await groupModel.updateOne({_id: groupFromAll._id}, { people: groupFromAll?.people, groups: groupFromAll?.groups});
+            }
         });
     }
 
