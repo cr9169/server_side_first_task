@@ -1,12 +1,21 @@
 version: '3.4'
 
 services:
+  mongo: 
+      image: mongo
+      ports:
+        - 27017:27017
+  backend:
+      depends_on:
+        - "mongo"
+      image: backend
+      build: ./backend
+      ports: 
+        - 3001:3001
   front:
+    depends_on:
+      - backend
     image: front
-    build:
-      context: front
-      dockerfile: ./Dockerfile
-    environment:
-      NODE_ENV: production
+    build: ./front
     ports:
       - 3000:3000

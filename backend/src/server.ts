@@ -1,4 +1,4 @@
-import { config, uri } from "../config";
+import { config } from "../config";
 import express from "express";
 import personRoute from "./person/router";
 import groupRoute from "./group/router";
@@ -9,7 +9,7 @@ import cors from 'cors';
 
 const app = express();
 const PORT: number = config.SERVER_PORT;
-const db = uri;
+const db = config.MONGO_URI;
 
 app.use(cors());
 app.use(express.json());
