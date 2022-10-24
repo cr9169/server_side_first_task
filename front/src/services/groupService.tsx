@@ -21,6 +21,8 @@ export class GroupService {
 
     static updateGroupByID = async(id: string, group: IGroup): Promise<IGroup> => {
         const updatedGroup: IGroup = await (await axios.post(`${config.API_BASE_URL}group/update/${id}`, group)).data;
+        console.log(updatedGroup);
+        
         return updatedGroup;
     };
 
