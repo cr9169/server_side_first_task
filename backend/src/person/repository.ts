@@ -3,6 +3,7 @@ import personModel from './model';
 import IPerson from './interface';
 import groupModel from '../group/model';
 import IGroup from '../group/interface';
+import { getGroupsAddedAndGroupsRemoved } from './utils';
 
 export const getPersonByID = (id: string) => personModel.findById(id);
 
