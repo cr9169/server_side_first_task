@@ -118,12 +118,12 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             }
 
             else {
-                await alert("group does'nt exists!");
+                alert("group does'nt exists!");
             }
         }
 
         else {
-            console.log("age is'nt valid!");
+            alert("age is'nt valid!");
         }
         
         handleCloseCreate();

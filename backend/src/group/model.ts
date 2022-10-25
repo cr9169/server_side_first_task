@@ -1,22 +1,26 @@
-import IGroup from "./interface";
-import mongoose from "mongoose";
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+import IGroup from './interface';
+
+const { Schema } = mongoose;
 
 const groupSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    groups: {
-        type: Array<String>,
-        ref: 'group',
-        required: true
-    },
-    people: {
-        type: Array<String>,
-        ref: 'person',
-        required: true
-    }
+  name: {
+    type: String,
+    required: true,
+  },
+
+  groups: {
+    type: Array<string>,
+    ref: 'group',
+    required: true,
+  },
+  people: {
+    type: Array<string>,
+    ref: 'person',
+    required: true,
+
+  },
 });
 
-export const groupModel = mongoose.model<IGroup & mongoose.Document>('group', groupSchema);
+const groupModel = mongoose.model<IGroup & mongoose.Document>('group', groupSchema);
+export default groupModel;

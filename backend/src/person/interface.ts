@@ -2,7 +2,7 @@ export interface IPerson {
     _id?: string,
     firstName: string,
     age: number,
-    groups: string[], 
+    groups: string[],
     lastName: string
 }
 

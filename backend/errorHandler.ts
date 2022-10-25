@@ -1,4 +1,4 @@
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler } from 'express';
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.log(err.message, err.statusCode);
@@ -8,5 +8,5 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   res
     .status(err.statusCode || 500)
-    .json({ message: err.message || "An Unknown Error" });
+    .json({ message: err.message || 'An Unknown Error' });
 };
