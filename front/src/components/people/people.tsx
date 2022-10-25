@@ -118,12 +118,12 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             }
 
             else {
-                await alert("group does'nt exists!");
+                alert("group does'nt exists!");
             }
         }
 
         else {
-            console.log("age is'nt valid!");
+            alert("age is'nt valid!");
         }
         
         handleCloseCreate();
@@ -175,11 +175,12 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     return (<div id="people">
         <div>{peopleList.length ? peopleList.map((person: IPerson, index: number) =>
             <div id="people-single-card-div">
-           
             <div>
             <div> 
                 <div>
-                    <p>Person ID: &nbsp;&nbsp; {person._id}</p>
+                    <p>{person._id}</p>
+                    <p>{person.firstName}</p>
+                    <p>{person.lastName}</p>
                 </div>
                 <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(person)}>Edit</Button> 
                 <Dialog open={openEdit} onClose={handleCloseEdit}>
@@ -227,11 +228,17 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     </DialogContentText>
                     <List component="div" role="group">
                         {currentPerson?.groups.map((group: string) => (
+                            <>
+                            {/* <ListItemText>
+                                <hr />
+                                name: {GroupService.getGroupByID(group).then((group) => { group.name; })}
+                                <hr />
+                            </ListItemText> */}
                             <ListItemText>
                                 <hr />
                                 id: {group}
                                 <hr />
-                            </ListItemText>
+                            </ListItemText></>
                         ))}
                     </List>
                     <br /><br />

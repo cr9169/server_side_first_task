@@ -147,7 +147,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                 </div>
                 <Button id="edit-button" variant="outlined" onClick={() => handleClickOpenEdit(group)}>Edit</Button> 
                 <Dialog open={openEdit} onClose={handleCloseEdit}>
-                    <DialogTitle>Edit Person</DialogTitle>
+                    <DialogTitle>Edit Group</DialogTitle>
                     <DialogContent>
                     <TextField
                         autoFocus
