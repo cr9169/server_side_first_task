@@ -60,30 +60,36 @@ export const updatePersonByID = async (person: IPerson, id: string) => {
   const foundPerson = await personModel.findById(id);
   if (!foundPerson) throw new Error('Cant find person to update');
 
-  await Promise.allSettled(person.groups.map(async (group: string) => {
-    const personGroup: IGroup | null = await groupModel.findById(group);
-    if (!personGroup?.people.includes(id)) {
-      const newPersonGroupPeople: string[] | undefined = personGroup?.people;
-      newPersonGroupPeople?.push(id);
-      await groupModel.updateOne(
-        { _id: group },
-        { name: personGroup?.name, people: newPersonGroupPeople, groups: personGroup?.groups },
-      );
-    }
-  }));
+  await personModel.findByIdAndUpdate({ _id: id }, person).exec();
+  const updatedPersonToReturn: IPerson | null = await personModel.findById(id);
+  const [removedGroups, addedGroups] = getGroupsAddedAndGroupsRemoved(person, foundPerson);
 
-  const allGroups: IGroup[] = await groupModel.find({});
-  await Promise.allSettled(allGroups.map(async (groupFromAll) => {
-    if ((!person.groups.includes(groupFromAll._id as string)) && groupFromAll.people.includes(id)) {
-      groupFromAll?.people.splice(groupFromAll?.people.indexOf(id), 1);
-      await groupModel.updateOne(
-        { _id: groupFromAll._id },
-        { name: groupFromAll.name, people: groupFromAll?.people, groups: groupFromAll?.groups },
-      );
-    }
-  }));
+  if (updatedPersonToReturn?.groups.length !== 0) {
+    await Promise.allSettled(addedGroups.map(async (addedGroup) => {
+      await groupModel.findByIdAndUpdate(
+        addedGroup,
+        { $addToSet: { people: id } },
+        { new: true },
+      ).exec();
+    }));
+  }
 
-  return personModel.updateOne({ _id: id }, person);
+  if (removedGroups.length !== 0) {
+    await Promise.allSettled(removedGroups.map(async (removedGroup) => {
+      const removedGroupObject: IGroup | null = await groupModel.findById(removedGroup);
+      const newGroupPeople = [...(removedGroupObject?.people as string[])];
+      newGroupPeople.splice(newGroupPeople.indexOf(id), 1);
+
+      await groupModel.findByIdAndUpdate(
+        { _id: removedGroup },
+        {
+          people: newGroupPeople,
+        },
+      ).exec();
+    }));
+  }
+
+  return updatedPersonToReturn;
 };
 
 export const updatePersonObjectByID = async (person: IPerson, id: string) => {

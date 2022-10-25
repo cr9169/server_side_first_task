@@ -91,10 +91,10 @@ export const updateGroupByID = async (group: IGroup, groupID: string) => {
   if (!foundGroup) throw new Error('Cant find group to update');
 
   await groupModel.findByIdAndUpdate({ _id: groupID }, group).exec();
-  const updatedPersonToReturn: IGroup | null = await groupModel.findById(groupID);
+  const updatedGroupToReturn: IGroup | null = await groupModel.findById(groupID);
   const [removedPeople, addedPeople] = getPeopleAddedAndPeopleRemoved(group, foundGroup);
 
-  if (updatedPersonToReturn?.people.length !== 0) {
+  if (updatedGroupToReturn?.people.length !== 0) {
     await Promise.allSettled(addedPeople.map(async (addedPerson) => {
       await personModel.findByIdAndUpdate(
         addedPerson,
@@ -119,7 +119,7 @@ export const updateGroupByID = async (group: IGroup, groupID: string) => {
     }));
   }
 
-  return updatedPersonToReturn;
+  return updatedGroupToReturn;
 };
 
 export const updateGroupObjectByID = async (groupID: string, group: IGroup) => {
