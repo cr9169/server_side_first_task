@@ -157,7 +157,7 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             await PersonService.updatePersonByID(person._id!, newPerson);
 
             const newPersonList: IPerson[] = peopleList;
-            let personIndex: number = peopleList.findIndex(person => person._id === person._id);
+            let personIndex: number = peopleList.findIndex(personFromList => personFromList._id === person._id);
             newPersonList[personIndex] = newPerson;
             
             setPeopleList(newPersonList);

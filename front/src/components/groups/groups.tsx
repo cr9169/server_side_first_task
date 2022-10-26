@@ -81,7 +81,6 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         newGroupList?.splice(index, 1);
         setGroupsList([...newGroupList!]);
         GroupService.deleteGroupByID(groupToDeleteID);
-        fetchData();
     }
 
     const handeClickCreateGroup = async () => { 
