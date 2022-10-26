@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GroupService } from "../../services/groupService";
-import { PersonService } from "../../services/personService";
 import IGroup from "../../interfaces/groupInterface";
 import IPerson from "../../interfaces/personInterface";
 import { Title } from "../customComponents/title";
@@ -13,6 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContentText from '@mui/material/DialogContentText';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
+import { breakGroupsNamesInputsAndReturnArray, doesArrayContainsOtherArray } from '../../utils';
 import "./groups.css"
 
 interface IProps{
@@ -22,7 +22,7 @@ interface IProps{
     setGroupsList: React.Dispatch<React.SetStateAction<IGroup[]>>
 }
 
-const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGroupsList}) => {
+const Groups: React.FC<IProps> = ({peopleList, groupsList, setGroupsList}) => {
 
     const [openCreate, setOpenCreate] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
@@ -35,29 +35,7 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     const [nameToUpdateValue, setNameToUpdateValue] = useState<string>(""); 
     const [groupsToRelateUpdateValue, setGroupsToRelateUpdateValue] = useState<string>("");
     const [peopleToRelateUpdateValue, setPeopleToRelateUpdateValue] = useState<string>("");
-
-    const breakGroupsNamesInputsAndReturnArray = (namesInput: string): string[] => {
-
-        if(namesInput === "")
-            return [];
-        return namesInput.split(',').join(' ').trim().split(/\s+/);
-    }
-
-    const doesArrayContainsOtherArray = (firstArray: string[], secondArray: string[]): boolean => {
-        if(secondArray.length === 0)
-            return true;
-        return secondArray.every(group => firstArray.includes(group));
-    }
     
-    const fetchData = async () => {
-        setPeopleList(await PersonService.getAllPeople());
-        setGroupsList(await GroupService.getAllGroups());
-    }   
-
-    useEffect( () => {
-        fetchData();
-    }, []);
-
     const handleClickOpenCreate = () => {
         setOpenCreate(true);
     };
@@ -75,13 +53,12 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         setOpenEdit(false);
     };
 
-    const deleteGroup = (index: number): void => {
+    const deleteGroup = async (index: number): Promise<void> => {
         const newGroupList = groupsList;
         const groupToDeleteID: string = newGroupList![index]._id!; 
         newGroupList?.splice(index, 1);
         setGroupsList([...newGroupList!]);
-        GroupService.deleteGroupByID(groupToDeleteID);
-        fetchData();
+        await GroupService.deleteGroupByID(groupToDeleteID);
     }
 
     const handeClickCreateGroup = async () => { 
@@ -99,7 +76,6 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             setGroupsList(newGroupList);
 
             handleCloseCreate();
-            fetchData();
     };
 
     const handeClickUpdateGroup = async (group: IGroup) => { 
@@ -134,10 +110,8 @@ const Groups: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         }
 
         handleCloseEdit();
-        fetchData();
     };
     
-    //add DB functionality to submition
     return (<div id="groups">
         <div>{groupsList.length ? groupsList.map((group: IGroup, index: number) =>
             <div id="groups-single-card-div">

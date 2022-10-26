@@ -13,6 +13,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContentText from '@mui/material/DialogContentText';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
+import { breakGroupsNamesInputsAndReturnArray, doesArrayContainsOtherArray, isNumber } from '../../utils';
 import "./people.css";
 
 interface IProps{
@@ -40,35 +41,6 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
     const [ageUpdateValue, setAgeUpdateValue] = useState<string>("");
     const [groupsToRelateUpdateValue, setGroupsToRelateUpdateValue] = useState<string>(""); 
 
-    const isNumber = (value: string | number): boolean => {
-       
-        return ((value != null) &&
-               (value !== '') &&
-               !isNaN(Number(value.toString())));
-    }
-
-    const breakGroupsNamesInputsAndReturnArray = (namesInput: string): string[] => {
-
-        if(namesInput === "")
-            return [];
-        return namesInput.split(',').join(' ').trim().split(/\s+/);
-    }
-
-    const doesArrayContainsOtherArray = (firstArray: string[], secondArray: string[]): boolean => {
-        if(secondArray.length === 0)
-            return true;
-        return secondArray.every(group => firstArray.includes(group));
-    }
-
-    const fetchData = async () => {
-        setGroupsList(await GroupService.getAllGroups());
-        setPeopleList(await PersonService.getAllPeople());
-    }  
-
-    useEffect( () => {
-        fetchData();
-    }, []);
-
     const handleClickOpenCreate = () => {
         setOpenCreate(true);
     };
@@ -86,14 +58,13 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         setOpenEdit(false);
     };
 
-    const deletePerson = (index: number): void => {
+    const deletePerson = async (index: number): Promise<void> => {
         const newPeopleList = peopleList;
         const personToDeleteID: string = newPeopleList![index]._id!; // how to get id by object (person)
         newPeopleList?.splice(index, 1);
         setPeopleList([...newPeopleList!]);
-        PersonService.deletePersonByID(personToDeleteID);
+        await PersonService.deletePersonByID(personToDeleteID);
     }
-
     const handeClickCreatePerson = async () => {
         const groups: string[] = breakGroupsNamesInputsAndReturnArray(groupsToRelateCreationValue);
         
@@ -127,7 +98,6 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
         }
         
         handleCloseCreate();
-        fetchData();
     };
 
 
@@ -157,19 +127,18 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
             await PersonService.updatePersonByID(person._id!, newPerson);
 
             const newPersonList: IPerson[] = peopleList;
-            let personIndex: number = peopleList.findIndex(person => person._id === person._id);
+            let personIndex: number = peopleList.findIndex(personFromList => personFromList._id === person._id);
             newPersonList[personIndex] = newPerson;
             
             setPeopleList(newPersonList);
         }
 
         else {
-            alert("group does'nt exists!");
+            alert("group doesn't exists!");
         }
 
         
         handleCloseEdit();
-        fetchData();
     };
     
     return (<div id="people">
@@ -228,17 +197,11 @@ const People: React.FC<IProps> = ({peopleList, setPeopleList, groupsList, setGro
                     </DialogContentText>
                     <List component="div" role="group">
                         {currentPerson?.groups.map((group: string) => (
-                            <>
-                            {/* <ListItemText>
-                                <hr />
-                                name: {GroupService.getGroupByID(group).then((group) => { group.name; })}
-                                <hr />
-                            </ListItemText> */}
                             <ListItemText>
                                 <hr />
                                 id: {group}
                                 <hr />
-                            </ListItemText></>
+                            </ListItemText>
                         ))}
                     </List>
                     <br /><br />
