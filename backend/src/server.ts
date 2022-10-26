@@ -18,8 +18,6 @@ app.use('/', groupRoute);
 app.use(errorHandler);
 app.use((req, res) => res.status(404).send('Route not found!'));
 
-connect();
-
 function connect() {
   mongoose
     .connect(`${db}/tsTask`)
@@ -33,5 +31,7 @@ function connect() {
       throw createHttpError(501, 'Unable to connect database');
     });
 }
+
+connect();
 
 export default app;
