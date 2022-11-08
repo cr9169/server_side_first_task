@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import createHttpError from 'http-errors';
 import cors from 'cors';
-import { config } from '../config';
+import config from '../config';
 import personRoute from './person/router';
 import groupRoute from './group/router';
 import { errorHandler } from '../errorHandler';
