@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # html1
+=======
+# a
+>>>>>>> 85f20863ff035dd39f512a4a8f8314d7d10901fe
 
 
 
@@ -15,14 +19,24 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
+<<<<<<< HEAD
 git remote add origin https://gitlab.com/nitaymoshe1234/html1.git
 git branch -M main
 git push -uf origin main
+=======
+git remote add origin https://gitlab.com/yesodot/hafifot/machzor-8/nitai-moshe/a.git
+git branch -M master
+git push -uf origin master
+>>>>>>> 85f20863ff035dd39f512a4a8f8314d7d10901fe
 ```
 
 ## Integrate with your tools
 
+<<<<<<< HEAD
 - [ ] [Set up project integrations](https://gitlab.com/nitaymoshe1234/html1/-/settings/integrations)
+=======
+- [ ] [Set up project integrations](https://gitlab.com/yesodot/hafifot/machzor-8/nitai-moshe/a/-/settings/integrations)
+>>>>>>> 85f20863ff035dd39f512a4a8f8314d7d10901fe
 
 ## Collaborate with your team
 
